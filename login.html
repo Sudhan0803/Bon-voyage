@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BON-VOYAGE | Login & Signup</title>
+    <title>BON-VOYAGE | Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
     <style>
-        /* All the existing CSS styles remain exactly the same */
         :root {
             --primary: #4361ee;
             --primary-dark: #3a56d4;
@@ -85,48 +84,19 @@
             animation: fadeInOut 2s ease 0.5s forwards;
         }
         
-        /* Auth Container */
-        .auth-container {
+        /* Login Container */
+        .login-container {
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             opacity: 0;
             animation: fadeIn 0.5s ease 3s forwards;
         }
         
-        .auth-card {
+        .login-card {
             background-color: white;
             border-radius: var(--border-radius);
             padding: 40px;
             box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .auth-form {
-            transition: transform 0.5s ease;
-        }
-        
-        /* Show Signup Form */
-        .auth-card.show-signup .login-form {
-            transform: translateX(-100%);
-            opacity: 0;
-            position: absolute;
-        }
-        
-        .auth-card.show-signup .signup-form {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        
-        .login-form, .signup-form {
-            transition: all 0.5s ease;
-        }
-        
-        .signup-form {
-            transform: translateX(100%);
-            opacity: 0;
-            position: absolute;
-            width: calc(100% - 80px);
         }
         
         /* Animations */
@@ -211,7 +181,7 @@
             transform: translateY(-50%);
         }
         
-        /* Auth Form Styles */
+        /* Login Form Styles */
         .logo {
             display: flex;
             align-items: center;
@@ -248,7 +218,7 @@
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .form-label {
@@ -260,7 +230,7 @@
         
         .form-control {
             width: 100%;
-            padding: 12px 15px;
+            padding: 15px;
             border: 1px solid #e9ecef;
             border-radius: var(--border-radius);
             font-family: 'Poppins', sans-serif;
@@ -272,18 +242,6 @@
             border-color: var(--primary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        @media (max-width: 480px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
         }
         
         .form-options {
@@ -339,59 +297,21 @@
             box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
         }
         
-        .btn-secondary {
-            background-color: white;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-        
-        .btn-secondary:hover {
-            background-color: var(--light);
-        }
-        
-        .auth-switch {
+        .signup-link {
             text-align: center;
             margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #e9ecef;
         }
         
-        .auth-switch a {
+        .signup-link a {
             color: var(--primary);
             font-weight: 600;
             text-decoration: none;
-            cursor: pointer;
         }
         
-        .auth-switch a:hover {
+        .signup-link a:hover {
             text-decoration: underline;
-        }
-        
-        .password-toggle {
-            position: relative;
-        }
-        
-        .password-toggle i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: var(--gray);
-        }
-        
-        .password-strength {
-            height: 4px;
-            background-color: #e9ecef;
-            border-radius: 2px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-        
-        .strength-bar {
-            height: 100%;
-            width: 0;
-            transition: width 0.3s, background-color 0.3s;
         }
         
         /* Clouds for background */
@@ -435,33 +355,6 @@
                 transform: translateX(calc(100vw + 100px));
             }
         }
-        
-        /* Error message */
-        .error-message {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
-        
-        .form-group.error .form-control {
-            border-color: #dc3545;
-        }
-        
-        .form-group.error .error-message {
-            display: block;
-        }
-        
-        /* Success message */
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 12px;
-            border-radius: var(--border-radius);
-            margin-bottom: 20px;
-            text-align: center;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -481,397 +374,101 @@
     <div class="cloud"></div>
     <div class="cloud"></div>
     
-    <!-- Auth Form -->
-    <div class="auth-container" id="authContainer">
-        <div class="auth-card" id="authCard">
-            <!-- Success Message -->
-            <div class="success-message" id="successMessage">
-                <i class="fas fa-check-circle"></i> Account created successfully! Please sign in.
+    <!-- Login Form -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-card">
+            <div class="logo">
+                <i class="fas fa-plane-departure"></i>
+                <h1>BON-VOYAGE</h1>
             </div>
             
-            <!-- Login Form -->
-            <div class="login-form auth-form">
-                <div class="logo">
-                    <i class="fas fa-plane-departure"></i>
-                    <h1>BON-VOYAGE</h1>
-                </div>
-                
-                <h2 class="form-title">Welcome Back!</h2>
-                <p class="form-subtitle">Sign in to access your travel plans</p>
-                
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label class="form-label" for="loginEmail">Email Address</label>
-                        <input type="email" class="form-control" id="loginEmail" placeholder="you@example.com" required>
-                        <div class="error-message" id="loginEmailError">Please enter a valid email address</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="loginPassword">Password</label>
-                        <div class="password-toggle">
-                            <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
-                            <i class="fas fa-eye" id="toggleLoginPassword"></i>
-                        </div>
-                        <div class="error-message" id="loginPasswordError">Password is required</div>
-                    </div>
-                    
-                    <div class="form-options">
-                        <div class="remember-me">
-                            <input type="checkbox" id="remember">
-                            <label for="remember">Remember me</label>
-                        </div>
-                        <a href="#" class="forgot-password" id="forgotPassword">Forgot Password?</a>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
-                    </button>
-                </form>
-                
-                <div class="auth-switch">
-                    <p>Don't have an account? <a id="showSignup">Sign up here</a></p>
-                </div>
-            </div>
+            <h2 class="form-title">Welcome Back!</h2>
+            <p class="form-subtitle">Sign in to access your travel plans</p>
             
-            <!-- Signup Form -->
-            <div class="signup-form auth-form">
-                <div class="logo">
-                    <i class="fas fa-plane-departure"></i>
-                    <h1>BON-VOYAGE</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
                 </div>
                 
-                <h2 class="form-title">Create Your Account</h2>
-                <p class="form-subtitle">Start planning your adventures today</p>
-                
-                <form id="signupForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="firstName">First Name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="John" required>
-                            <div class="error-message" id="firstNameError">First name is required</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="lastName">Last Name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="Doe" required>
-                            <div class="error-message" id="lastNameError">Last name is required</div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="signupEmail">Email Address</label>
-                        <input type="email" class="form-control" id="signupEmail" placeholder="you@example.com" required>
-                        <div class="error-message" id="signupEmailError">Please enter a valid email address</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="signupPassword">Password</label>
-                        <div class="password-toggle">
-                            <input type="password" class="form-control" id="signupPassword" placeholder="Create a password" required>
-                            <i class="fas fa-eye" id="toggleSignupPassword"></i>
-                        </div>
-                        <div class="password-strength">
-                            <div class="strength-bar" id="passwordStrength"></div>
-                        </div>
-                        <div class="error-message" id="signupPasswordError">Password must be at least 8 characters</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="confirmPassword">Confirm Password</label>
-                        <div class="password-toggle">
-                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
-                            <i class="fas fa-eye" id="toggleConfirmPassword"></i>
-                        </div>
-                        <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Travel Style</label>
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
-                            <label style="display: flex; align-items: center; gap: 5px;">
-                                <input type="checkbox" name="travelStyle" value="solo"> Solo Travel
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 5px;">
-                                <input type="checkbox" name="travelStyle" value="family"> Family
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 5px;">
-                                <input type="checkbox" name="travelStyle" value="adventure"> Adventure
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 5px;">
-                                <input type="checkbox" name="travelStyle" value="luxury"> Luxury
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="phone">Phone Number (Optional)</label>
-                        <input type="tel" class="form-control" id="phone" placeholder="+1 (555) 123-4567">
-                    </div>
-                    
-                    <div class="form-options">
-                        <div class="remember-me">
-                            <input type="checkbox" id="terms" required>
-                            <label for="terms">I agree to the <a href="#" style="color: var(--primary);">Terms & Conditions</a></label>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-user-plus"></i> Create Account
-                    </button>
-                </form>
-                
-                <div class="auth-switch">
-                    <p>Already have an account? <a id="showLogin">Sign in here</a></p>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
                 </div>
+                
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+            
+            <div class="signup-link">
+                <p>Don't have an account? <a href="#" id="signupLink">Sign up here</a></p>
             </div>
         </div>
     </div>
 
     <script>
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple validation
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // For demo purposes, accept any non-empty credentials
+            if (email && password) {
+                // Show loading effect
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+                submitBtn.disabled = true;
+                
+                // Simulate API call delay
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Login Successful!';
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                }, 1500);
+            }
+        });
+        
+        // Handle signup link
+        document.getElementById('signupLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Sign up feature coming soon! For now, please use the login form with any credentials.');
+            document.getElementById('email').focus();
+        });
+        
+        // Handle forgot password
+        document.querySelector('.forgot-password').addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = prompt('Enter your email address to reset password:');
+            if (email) {
+                alert(`Password reset link has been sent to ${email}. Please check your inbox.`);
+            }
+        });
+        
         // Remove intro container after animation completes
         setTimeout(() => {
             const introContainer = document.getElementById('introContainer');
             if (introContainer) {
                 introContainer.style.display = 'none';
             }
-        }, 3000);
-
-        // Toggle between login and signup forms
-        document.getElementById('showSignup').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('authCard').classList.add('show-signup');
-            document.getElementById('successMessage').style.display = 'none';
-        });
-
-        document.getElementById('showLogin').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('authCard').classList.remove('show-signup');
-        });
-
-        // Password toggle functionality
-        function setupPasswordToggle(passwordFieldId, toggleButtonId) {
-            const passwordField = document.getElementById(passwordFieldId);
-            const toggleButton = document.getElementById(toggleButtonId);
-            
-            if (passwordField && toggleButton) {
-                toggleButton.addEventListener('click', function() {
-                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-                    passwordField.setAttribute('type', type);
-                    this.classList.toggle('fa-eye');
-                    this.classList.toggle('fa-eye-slash');
-                });
-            }
-        }
-
-        // Setup password toggles
-        setupPasswordToggle('loginPassword', 'toggleLoginPassword');
-        setupPasswordToggle('signupPassword', 'toggleSignupPassword');
-        setupPasswordToggle('confirmPassword', 'toggleConfirmPassword');
-
-        // Password strength indicator
-        const signupPassword = document.getElementById('signupPassword');
-        const strengthBar = document.getElementById('passwordStrength');
-
-        signupPassword.addEventListener('input', function() {
-            const password = this.value;
-            let strength = 0;
-            
-            if (password.length >= 8) strength++;
-            if (/[A-Z]/.test(password)) strength++;
-            if (/[0-9]/.test(password)) strength++;
-            if (/[^A-Za-z0-9]/.test(password)) strength++;
-            
-            // Update strength bar
-            const width = strength * 25;
-            let color = '#dc3545'; // Red
-            
-            if (strength === 2) color = '#ffc107'; // Yellow
-            if (strength === 3) color = '#28a745'; // Green
-            if (strength === 4) color = '#20c997'; // Teal
-            
-            strengthBar.style.width = `${width}%`;
-            strengthBar.style.backgroundColor = color;
-        });
-
-        // NEW SIGNUP IMPLEMENTATION - SIMPLIFIED AND FIXED
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Clear all previous errors
-            const errorElements = document.querySelectorAll('.error-message');
-            errorElements.forEach(el => {
-                el.textContent = '';
-                el.parentElement.classList.remove('error');
-            });
-            
-            // Get form values
-            const firstName = document.getElementById('firstName').value.trim();
-            const lastName = document.getElementById('lastName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const terms = document.getElementById('terms').checked;
-            
-            let hasError = false;
-            
-            // Validate first name
-            if (!firstName) {
-                document.getElementById('firstNameError').textContent = 'First name is required';
-                document.getElementById('firstNameError').parentElement.classList.add('error');
-                hasError = true;
-            }
-            
-            // Validate last name
-            if (!lastName) {
-                document.getElementById('lastNameError').textContent = 'Last name is required';
-                document.getElementById('lastNameError').parentElement.classList.add('error');
-                hasError = true;
-            }
-            
-            // Validate email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email || !emailRegex.test(email)) {
-                document.getElementById('signupEmailError').textContent = 'Please enter a valid email address';
-                document.getElementById('signupEmailError').parentElement.classList.add('error');
-                hasError = true;
-            }
-            
-            // Validate password
-            if (!password || password.length < 8) {
-                document.getElementById('signupPasswordError').textContent = 'Password must be at least 8 characters';
-                document.getElementById('signupPasswordError').parentElement.classList.add('error');
-                hasError = true;
-            }
-            
-            // Validate confirm password
-            if (password !== confirmPassword) {
-                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
-                document.getElementById('confirmPasswordError').parentElement.classList.add('error');
-                hasError = true;
-            }
-            
-            // Validate terms
-            if (!terms) {
-                alert('Please accept the Terms & Conditions to continue');
-                hasError = true;
-            }
-            
-            // If no errors, proceed with signup
-            if (!hasError) {
-                // Show loading state
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
-                submitBtn.disabled = true;
-                
-                // Simulate API call
-                setTimeout(() => {
-                    // Reset form
-                    this.reset();
-                    strengthBar.style.width = '0';
-                    
-                    // Show success message
-                    document.getElementById('successMessage').style.display = 'block';
-                    
-                    // Switch to login form
-                    document.getElementById('authCard').classList.remove('show-signup');
-                    
-                    // Pre-fill login form with new credentials
-                    document.getElementById('loginEmail').value = email;
-                    document.getElementById('loginPassword').value = password;
-                    
-                    // Reset button state
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                    
-                    // Focus on email field in login form
-                    setTimeout(() => {
-                        document.getElementById('loginEmail').focus();
-                    }, 100);
-                    
-                }, 1500);
-            }
-        });
-
-        // Handle login form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            
-            // Clear previous errors
-            document.getElementById('loginEmailError').parentElement.classList.remove('error');
-            document.getElementById('loginPasswordError').parentElement.classList.remove('error');
-            
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            let hasError = false;
-            
-            // Validate email
-            if (!email || !emailRegex.test(email)) {
-                document.getElementById('loginEmailError').parentElement.classList.add('error');
-                hasError = true;
-            }
-            
-            // Validate password
-            if (!password) {
-                document.getElementById('loginPasswordError').parentElement.classList.add('error');
-                hasError = true;
-            }
-            
-            if (!hasError) {
-                // Show loading state
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
-                submitBtn.disabled = true;
-                
-                // Simulate API call
-                setTimeout(() => {
-                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Login Successful!';
-                    
-                    // Simulate redirect to dashboard
-                    setTimeout(() => {
-                        // In a real app, this would redirect to dashboard
-                        // window.location.href = 'dashboard.html';
-                        
-                        // For demo, just show alert and reset form
-                        alert('Login successful! Redirecting to dashboard...');
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    }, 1000);
-                }, 1500);
-            }
-        });
-
-        // Handle forgot password
-        document.getElementById('forgotPassword').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get current email from either form
-            const isSignupForm = document.getElementById('authCard').classList.contains('show-signup');
-            const emailField = isSignupForm ? 'signupEmail' : 'loginEmail';
-            const email = document.getElementById(emailField).value.trim();
-            
-            if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                // Email is valid, show reset message
-                alert(`Password reset link has been sent to ${email}. Please check your inbox.`);
-            } else {
-                // Prompt for email
-                const userEmail = prompt('Please enter your email address to reset password:');
-                if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
-                    alert(`Password reset link has been sent to ${userEmail}. Please check your inbox.`);
-                } else if (userEmail) {
-                    alert('Please enter a valid email address.');
-                }
-            }
-        });
-
-        // Terms & Conditions link
-        document.querySelector('label[for="terms"] a').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Terms & Conditions:\n\n1. You must be at least 18 years old to use this service.\n2. You are responsible for maintaining the confidentiality of your account.\n3. You agree not to use the service for any illegal purposes.\n4. We reserve the right to modify or terminate the service at any time.\n5. Your travel plans and data are stored securely.\n\nBy creating an account, you agree to these terms.');
-        });
+        }, 3000); // 3 seconds total (2.5s animation + 0.5s fade out)
     </script>
 </body>
 </html>
