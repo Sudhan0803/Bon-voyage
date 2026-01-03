@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BON-VOYAGE | Activity Search</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --shadow: 0 10px 20px rgba(0,0,0,0.08);
+            --shadow-light: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 25px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+        }
+        
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 26px;
+            margin-left: 12px;
+            letter-spacing: 1px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+        
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--accent);
+        }
+        
+        .nav-link i {
+            width: 24px;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        .user-profile {
+            padding: 20px 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+        
+        .user-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .search-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            padding: 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+        
+        .filter-section {
+            margin-bottom: 20px;
+        }
+        
+        .filter-section h4 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .filter-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tag {
+            padding: 8px 16px;
+            background-color: var(--light);
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-tag:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .filter-tag.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .sort-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        .sort-select {
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+        
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .activity-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease;
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        
+        .activity-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .activity-price {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .activity-content {
+            padding: 20px;
+        }
+        
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .activity-name h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .activity-name p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .activity-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #ffc107;
+        }
+        
+        .activity-details {
+            margin-bottom: 15px;
+        }
+        
+        .activity-details p {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+        
+        .activity-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .activity-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .tag {
+            padding: 4px 10px;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+        
+        .no-results i {
+            font-size: 64px;
+            color: var(--light-gray);
+            margin-bottom: 20px;
+        }
+        
+        .no-results h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .no-results p {
+            color: var(--gray);
+            margin-bottom: 30px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .logo h1, .nav-link span, .user-info {
+                display: none;
+            }
+            
+            .logo {
+                justify-content: center;
+                padding: 0 0 30px;
+            }
+            
+            .nav-link {
+                justify-content: center;
+                padding: 15px 0;
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .user-profile {
+                justify-content: center;
+                padding: 20px 0;
+            }
+            
+            .user-avatar {
+                margin-right: 0;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .activities-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 70px;
+                flex-direction: row;
+                padding: 0;
+            }
+            
+            .logo {
+                padding: 0 20px;
+                border-bottom: none;
+                margin-bottom: 0;
+                border-right: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            .nav-menu {
+                display: flex;
+                flex-grow: 1;
+                justify-content: space-around;
+            }
+            
+            .nav-item {
+                margin-bottom: 0;
+            }
+            
+            .nav-link {
+                border-left: none;
+                border-bottom: 4px solid transparent;
+                padding: 0 15px;
+                height: 70px;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            .nav-link:hover, .nav-link.active {
+                border-left-color: transparent;
+                border-bottom-color: var(--accent);
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                margin-bottom: 5px;
+                font-size: 18px;
+            }
+            
+            .nav-link span {
+                display: block;
+                font-size: 12px;
+            }
+            
+            .user-profile {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .sort-container {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-plane-departure"></i>
+                <h1>BON-VOYAGE</h1>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li class="nav-item"><a href="create-trip.html" class="nav-link"><i class="fas fa-plus-circle"></i> <span>Create Trip</span></a></li>
+                <li class="nav-item"><a href="my-trips.html" class="nav-link"><i class="fas fa-suitcase"></i> <span>My Trips</span></a></li>
+                <li class="nav-item"><a href="itinerary-builder.html" class="nav-link"><i class="fas fa-route"></i> <span>Itinerary Builder</span></a></li>
+                <li class="nav-item"><a href="itinerary-view.html" class="nav-link"><i class="fas fa-binoculars"></i> <span>Itinerary View</span></a></li>
+                <li class="nav-item"><a href="city-search.html" class="nav-link"><i class="fas fa-city"></i> <span>City Search</span></a></li>
+                <li class="nav-item"><a href="activity-search.html" class="nav-link active"><i class="fas fa-hiking"></i> <span>Activity Search</span></a></li>
+                <li class="nav-item"><a href="budget.html" class="nav-link"><i class="fas fa-chart-pie"></i> <span>Trip Budget</span></a></li>
+                <li class="nav-item"><a href="calendar.html" class="nav-link"><i class="fas fa-calendar-alt"></i> <span>Calendar</span></a></li>
+                <li class="nav-item"><a href="public-itinerary.html" class="nav-link"><i class="fas fa-share-alt"></i> <span>Public Itinerary</span></a></li>
+                <li class="nav-item"><a href="profile.html" class="nav-link"><i class="fas fa-user-cog"></i> <span>Profile</span></a></li>
+                <li class="nav-item"><a href="admin.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> <span>Admin</span></a></li>
+            </ul>
+            
+            <div class="user-profile">
+                <div class="user-avatar">JS</div>
+                <div class="user-info">
+                    <h4>John Smith</h4>
+                    <p>Travel Enthusiast</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <div>
+                    <h1 class="page-title">Activity Search</h1>
+                    <p class="page-subtitle">Find things to do in your destinations</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="showRecentSearches()">
+                        <i class="fas fa-history"></i> Recent
+                    </button>
+                </div>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search activities, attractions, or experiences...">
+                    <button class="btn btn-primary" onclick="searchActivities()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                
+                <div class="filter-section">
+                    <h4>Activity Type</h4>
+                    <div class="filter-tags" id="typeFilters">
+                        <!-- Type filters will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h4>Price Range</h4>
+                    <div class="filter-tags" id="priceFilters">
+                        <!-- Price filters will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h4>Duration</h4>
+                    <div class="filter-tags" id="durationFilters">
+                        <!-- Duration filters will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="sort-container">
+                    <div>
+                        <span style="font-weight: 500; margin-right: 10px;">Showing 24 activities</span>
+                        <button class="btn btn-secondary btn-sm" onclick="clearAllFilters()">
+                            <i class="fas fa-times"></i> Clear All
+                        </button>
+                    </div>
+                    <select class="sort-select" id="sortSelect" onchange="sortActivities()">
+                        <option value="popularity">Sort by: Popularity</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="duration">Shortest Duration</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="activities-grid" id="activitiesGrid">
+                <!-- Activity cards will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample activity data
+        const activities = [
+            {
+                id: 1,
+                name: "Colosseum Guided Tour",
+                city: "Rome, Italy",
+                rating: 4.8,
+                price: 65,
+                duration: 3,
+                type: "sightseeing",
+                priceRange: "$$",
+                description: "Skip-the-line tour of ancient Roman amphitheater with expert guide",
+                tags: ["Historic", "Guided", "Architecture"],
+                imageColor: "linear-gradient(135deg, #4361ee, #3a56d4)"
+            },
+            {
+                id: 2,
+                name: "Vatican Museums & Sistine Chapel",
+                city: "Rome, Italy",
+                rating: 4.9,
+                price: 85,
+                duration: 4,
+                type: "sightseeing",
+                priceRange: "$$$",
+                description: "Exclusive access to Vatican treasures and Michelangelo's masterpiece",
+                tags: ["Art", "Religious", "Museum"],
+                imageColor: "linear-gradient(135deg, #7209b7, #5a0891)"
+            },
+            {
+                id: 3,
+                name: "Cooking Class: Pasta Making",
+                city: "Florence, Italy",
+                rating: 4.7,
+                price: 75,
+                duration: 3,
+                type: "food",
+                priceRange: "$$",
+                description: "Learn to make authentic Italian pasta from local chef",
+                tags: ["Food", "Cooking", "Local"],
+                imageColor: "linear-gradient(135deg, #f72585, #e11576)"
+            },
+            {
+                id: 4,
+                name: "Gondola Ride",
+                city: "Venice, Italy",
+                rating: 4.5,
+                price: 120,
+                duration: 1,
+                type: "romantic",
+                priceRange: "$$$$",
+                description: "Romantic gondola ride through Venice canals with serenade",
+                tags: ["Romantic", "Boat", "Unique"],
+                imageColor: "linear-gradient(135deg, #4cc9f0, #3ab5d8)"
+            },
+            {
+                id: 5,
+                name: "Duomo Cathedral Climb",
+                city: "Florence, Italy",
+                rating: 4.6,
+                price: 25,
+                duration: 2,
+                type: "sightseeing",
+                priceRange: "$",
+                description: "Climb to the top of Florence Cathedral for panoramic views",
+                tags: ["Architecture", "Views", "Historic"],
+                imageColor: "linear-gradient(135deg, #2a9d8f, #21867a)"
+            },
+            {
+                id: 6,
+                name: "Wine Tasting in Tuscany",
+                city: "Florence, Italy",
+                rating: 4.9,
+                price: 95,
+                duration: 4,
+                type: "food",
+                priceRange: "$$$",
+                description: "Visit vineyards and taste world-famous Tuscan wines",
+                tags: ["Wine", "Food", "Scenic"],
+                imageColor: "linear-gradient(135deg, #f4a261, #e76f51)"
+            },
+            {
+                id: 7,
+                name: "Last Supper Viewing",
+                city: "Milan, Italy",
+                rating: 4.7,
+                price: 45,
+                duration: 1.5,
+                type: "art",
+                priceRange: "$$",
+                description: "View Leonardo da Vinci's masterpiece with guided explanation",
+                tags: ["Art", "Historic", "Must-See"],
+                imageColor: "linear-gradient(135deg, #e9c46a, #d4a017)"
+            },
+            {
+                id: 8,
+                name: "Lake Como Day Trip",
+                city: "Milan, Italy",
+                rating: 4.8,
+                price: 150,
+                duration: 8,
+                type: "scenic",
+                priceRange: "$$$$",
+                description: "Full-day tour to beautiful Lake Como with boat ride",
+                tags: ["Scenic", "Boat", "Day Trip"],
+                imageColor: "linear-gradient(135deg, #264653, #1a2f3a)"
+            },
+            {
+                id: 9,
+                name: "Pizza Making Workshop",
+                city: "Naples, Italy",
+                rating: 4.6,
+                price: 55,
+                duration: 2.5,
+                type: "food",
+                priceRange: "$$",
+                description: "Learn to make authentic Neapolitan pizza in its birthplace",
+                tags: ["Food", "Cooking", "Local"],
+                imageColor: "linear-gradient(135deg, #9d4edd, #7b2cbf)"
+            },
+            {
+                id: 10,
+                name: "Vespa Tour of Rome",
+                city: "Rome, Italy",
+                rating: 4.8,
+                price: 110,
+                duration: 3,
+                type: "adventure",
+                priceRange: "$$$",
+                description: "Explore Rome's hidden gems on a vintage Vespa scooter",
+                tags: ["Adventure", "Unique", "Fun"],
+                imageColor: "linear-gradient(135deg, #ff6b6b, #ee5c5c)"
+            }
+        ];
+        
+        // Filter options
+        const typeFilters = [
+            { id: 'all', name: 'All Types' },
+            { id: 'sightseeing', name: 'Sightseeing' },
+            { id: 'food', name: 'Food & Drink' },
+            { id: 'adventure', name: 'Adventure' },
+            { id: 'art', name: 'Art & Culture' },
+            { id: 'romantic', name: 'Romantic' },
+            { id: 'scenic', name: 'Scenic' }
+        ];
+        
+        const priceFilters = [
+            { id: 'all', name: 'All Prices' },
+            { id: 'free', name: 'Free' },
+            { id: '$', name: 'Budget ($)' },
+            { id: '$$', name: 'Moderate ($$)' },
+            { id: '$$$', name: 'Expensive ($$$)' },
+            { id: '$$$$', name: 'Luxury ($$$$)' }
+        ];
+        
+        const durationFilters = [
+            { id: 'all', name: 'Any Duration' },
+            { id: 'short', name: 'Short (< 2h)' },
+            { id: 'medium', name: 'Medium (2-4h)' },
+            { id: 'long', name: 'Long (> 4h)' },
+            { id: 'fullday', name: 'Full Day' }
+        ];
+        
+        let currentFilters = {
+            type: 'all',
+            price: 'all',
+            duration: 'all'
+        };
+        
+        let searchQuery = '';
+        let sortBy = 'popularity';
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFilters();
+            renderActivities();
+        });
+        
+        // Render filters
+        function renderFilters() {
+            // Type filters
+            const typeFiltersContainer = document.getElementById('typeFilters');
+            typeFiltersContainer.innerHTML = typeFilters.map(filter => `
+                <div class="filter-tag ${filter.id === currentFilters.type ? 'active' : ''}" 
+                     data-type="${filter.id}" 
+                     onclick="setFilter('type', '${filter.id}')">
+                    ${filter.name}
+                </div>
+            `).join('');
+            
+            // Price filters
+            const priceFiltersContainer = document.getElementById('priceFilters');
+            priceFiltersContainer.innerHTML = priceFilters.map(filter => `
+                <div class="filter-tag ${filter.id === currentFilters.price ? 'active' : ''}" 
+                     data-price="${filter.id}" 
+                     onclick="setFilter('price', '${filter.id}')">
+                    ${filter.name}
+                </div>
+            `).join('');
+            
+            // Duration filters
+            const durationFiltersContainer = document.getElementById('durationFilters');
+            durationFiltersContainer.innerHTML = durationFilters.map(filter => `
+                <div class="filter-tag ${filter.id === currentFilters.duration ? 'active' : ''}" 
+                     data-duration="${filter.id}" 
+                     onclick="setFilter('duration', '${filter.id}')">
+                    ${filter.name}
+                </div>
+            `).join('');
+        }
+        
+        // Set filter
+        function setFilter(filterType, filterId) {
+            currentFilters[filterType] = filterId;
+            renderFilters();
+            renderActivities();
+        }
+        
+        // Render activities
+        function renderActivities() {
+            const activitiesGrid = document.getElementById('activitiesGrid');
+            
+            // Filter activities
+            let filteredActivities = activities;
+            
+            // Apply search filter
+            if (searchQuery) {
+                filteredActivities = filteredActivities.filter(activity => 
+                    activity.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    activity.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    activity.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    activity.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+                );
+            }
+            
+            // Apply type filter
+            if (currentFilters.type !== 'all') {
+                filteredActivities = filteredActivities.filter(activity => 
+                    activity.type === currentFilters.type
+                );
+            }
+            
+            // Apply price filter
+            if (currentFilters.price !== 'all') {
+                filteredActivities = filteredActivities.filter(activity => 
+                    activity.priceRange === currentFilters.price
+                );
+            }
+            
+            // Apply duration filter
+            if (currentFilters.duration !== 'all') {
+                filteredActivities = filteredActivities.filter(activity => {
+                    switch(currentFilters.duration) {
+                        case 'free':
+                            return activity.price === 0;
+                        case '$':
+                            return activity.price <= 30;
+                        case '$$':
+                            return activity.price > 30 && activity.price <= 80;
+                        case '$$$':
+                            return activity.price > 80 && activity.price <= 150;
+                        case '$$$$':
+                            return activity.price > 150;
+                        case 'short':
+                            return activity.duration < 2;
+                        case 'medium':
+                            return activity.duration >= 2 && activity.duration <= 4;
+                        case 'long':
+                            return activity.duration > 4;
+                        case 'fullday':
+                            return activity.duration >= 6;
+                        default:
+                            return true;
+                    }
+                });
+            }
+            
+            // Sort activities
+            filteredActivities.sort((a, b) => {
+                switch(sortBy) {
+                    case 'price-low':
+                        return a.price - b.price;
+                    case 'price-high':
+                        return b.price - a.price;
+                    case 'rating':
+                        return b.rating - a.rating;
+                    case 'duration':
+                        return a.duration - b.duration;
+                    default: // popularity
+                        return b.rating - a.rating; // Using rating as proxy for popularity
+                }
+            });
+            
+            if (filteredActivities.length === 0) {
+                activitiesGrid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>No activities found</h3>
+                        <p>Try adjusting your search or filters to find what you're looking for.</p>
+                        <button class="btn btn-primary" onclick="clearAllFilters()">
+                            <i class="fas fa-redo"></i> Clear All Filters
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            activitiesGrid.innerHTML = filteredActivities.map(activity => `
+                <div class="activity-card">
+                    <div class="activity-image" style="background: ${activity.imageColor};">
+                        <div class="activity-price">$${activity.price}</div>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-header">
+                            <div class="activity-name">
+                                <h4>${activity.name}</h4>
+                                <p>${activity.city}</p>
+                            </div>
+                            <div class="activity-rating">
+                                <i class="fas fa-star"></i> ${activity.rating}
+                            </div>
+                        </div>
+                        
+                        <div class="activity-details">
+                            <p>${activity.description}</p>
+                        </div>
+                        
+                        <div class="activity-meta">
+                            <div class="meta-item">
+                                <i class="far fa-clock"></i> ${activity.duration}h
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-wallet"></i> ${activity.priceRange}
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-tag"></i> ${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
+                            </div>
+                        </div>
+                        
+                        <div class="activity-tags">
+                            ${activity.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" style="flex-grow: 1;" onclick="addActivity(${activity.id})">
+                                <i class="fas fa-plus"></i> Add to Itinerary
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="viewActivityDetails(${activity.id})">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Search activities
+        function searchActivities() {
+            const searchInput = document.getElementById('searchInput');
+            searchQuery = searchInput.value.trim();
+            renderActivities();
+        }
+        
+        // Sort activities
+        function sortActivities() {
+            const sortSelect = document.getElementById('sortSelect');
+            sortBy = sortSelect.value;
+            renderActivities();
+        }
+        
+        // Clear all filters
+        function clearAllFilters() {
+            currentFilters = {
+                type: 'all',
+                price: 'all',
+                duration: 'all'
+            };
+            searchQuery = '';
+            sortBy = 'popularity';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('sortSelect').value = 'popularity';
+            renderFilters();
+            renderActivities();
+        }
+        
+        // Show recent searches
+        function showRecentSearches() {
+            alert('Recent searches:\n\n• Colosseum tour\n• Wine tasting\n• Cooking class\n• Gondola ride\n• Day trips\n\nClear recent searches?');
+        }
+        
+        // Add activity to itinerary
+        function addActivity(activityId) {
+            const activity = activities.find(a => a.id === activityId);
+            if (!activity) return;
+            
+            // Show day selection
+            const day = prompt(`Add "${activity.name}" to which day of your trip?\n\nEnter day number (1-15):`);
+            
+            if (day && day >= 1 && day <= 15) {
+                alert(`Added "${activity.name}" to Day ${day} of your itinerary!`);
+                // In a real app, this would update the itinerary
+            } else {
+                alert('Please enter a valid day number between 1 and 15.');
+            }
+        }
+        
+        // View activity details
+        function viewActivityDetails(activityId) {
+            const activity = activities.find(a => a.id === activityId);
+            if (!activity) return;
+            
+            alert(`Activity Details: ${activity.name}\n\nLocation: ${activity.city}\nRating: ${activity.rating}/5\nPrice: $${activity.price}\nDuration: ${activity.duration} hours\nType: ${activity.type}\n\nDescription: ${activity.description}\n\nTags: ${activity.tags.join(', ')}\n\nWould you like to:\n1. Add to itinerary\n2. Share with friends\n3. Save for later`);
+        }
+        
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchActivities();
+            }
+        });
+    </script>
+</body>
+</html>

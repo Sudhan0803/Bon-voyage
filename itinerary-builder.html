@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BON-VOYAGE | Itinerary Builder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --shadow: 0 10px 20px rgba(0,0,0,0.08);
+            --shadow-light: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 25px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+        }
+        
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 26px;
+            margin-left: 12px;
+            letter-spacing: 1px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+        
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--accent);
+        }
+        
+        .nav-link i {
+            width: 24px;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        .user-profile {
+            padding: 20px 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+        
+        .user-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-accent:hover {
+            background-color: #e11576;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .itinerary-builder {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .stops-panel {
+            flex: 0 0 350px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .stops-list {
+            margin-top: 20px;
+            min-height: 300px;
+        }
+        
+        .stop-item {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: move;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+        
+        .stop-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.98);
+        }
+        
+        .stop-item h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .stop-item p {
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        .stop-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .stop-actions button {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .activities-panel {
+            flex-grow: 1;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .day-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .day-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--light-gray);
+            background-color: white;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .day-btn:hover {
+            background-color: var(--light);
+        }
+        
+        .day-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .day-view {
+            margin-bottom: 30px;
+        }
+        
+        .day-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+            background-color: white;
+        }
+        
+        .activity-item:hover {
+            background-color: var(--light);
+        }
+        
+        .activity-time {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 100px;
+        }
+        
+        .activity-details {
+            flex-grow: 1;
+        }
+        
+        .activity-details h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .activity-details p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .activity-cost {
+            font-weight: 600;
+            color: var(--success);
+            margin-right: 15px;
+        }
+        
+        .activity-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .add-activity-form {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .logo h1, .nav-link span, .user-info {
+                display: none;
+            }
+            
+            .logo {
+                justify-content: center;
+                padding: 0 0 30px;
+            }
+            
+            .nav-link {
+                justify-content: center;
+                padding: 15px 0;
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .user-profile {
+                justify-content: center;
+                padding: 20px 0;
+            }
+            
+            .user-avatar {
+                margin-right: 0;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .itinerary-builder {
+                flex-direction: column;
+            }
+            
+            .stops-panel {
+                flex: none;
+                width: 100%;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 70px;
+                flex-direction: row;
+                padding: 0;
+            }
+            
+            .logo {
+                padding: 0 20px;
+                border-bottom: none;
+                margin-bottom: 0;
+                border-right: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            .nav-menu {
+                display: flex;
+                flex-grow: 1;
+                justify-content: space-around;
+            }
+            
+            .nav-item {
+                margin-bottom: 0;
+            }
+            
+            .nav-link {
+                border-left: none;
+                border-bottom: 4px solid transparent;
+                padding: 0 15px;
+                height: 70px;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            .nav-link:hover, .nav-link.active {
+                border-left-color: transparent;
+                border-bottom-color: var(--accent);
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                margin-bottom: 5px;
+                font-size: 18px;
+            }
+            
+            .nav-link span {
+                display: block;
+                font-size: 12px;
+            }
+            
+            .user-profile {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-plane-departure"></i>
+                <h1>BON-VOYAGE</h1>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li class="nav-item"><a href="create-trip.html" class="nav-link"><i class="fas fa-plus-circle"></i> <span>Create Trip</span></a></li>
+                <li class="nav-item"><a href="my-trips.html" class="nav-link"><i class="fas fa-suitcase"></i> <span>My Trips</span></a></li>
+                <li class="nav-item"><a href="itinerary-builder.html" class="nav-link active"><i class="fas fa-route"></i> <span>Itinerary Builder</span></a></li>
+                <li class="nav-item"><a href="itinerary-view.html" class="nav-link"><i class="fas fa-binoculars"></i> <span>Itinerary View</span></a></li>
+                <li class="nav-item"><a href="city-search.html" class="nav-link"><i class="fas fa-city"></i> <span>City Search</span></a></li>
+                <li class="nav-item"><a href="activity-search.html" class="nav-link"><i class="fas fa-hiking"></i> <span>Activity Search</span></a></li>
+                <li class="nav-item"><a href="budget.html" class="nav-link"><i class="fas fa-chart-pie"></i> <span>Trip Budget</span></a></li>
+                <li class="nav-item"><a href="calendar.html" class="nav-link"><i class="fas fa-calendar-alt"></i> <span>Calendar</span></a></li>
+                <li class="nav-item"><a href="public-itinerary.html" class="nav-link"><i class="fas fa-share-alt"></i> <span>Public Itinerary</span></a></li>
+                <li class="nav-item"><a href="profile.html" class="nav-link"><i class="fas fa-user-cog"></i> <span>Profile</span></a></li>
+                <li class="nav-item"><a href="admin.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> <span>Admin</span></a></li>
+            </ul>
+            
+            <div class="user-profile">
+                <div class="user-avatar">JS</div>
+                <div class="user-info">
+                    <h4>John Smith</h4>
+                    <p>Travel Enthusiast</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <div>
+                    <h1 class="page-title">Itinerary Builder</h1>
+                    <p class="page-subtitle">Italian Adventure • June 15-30, 2023</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="location.href='itinerary-view.html'"><i class="fas fa-eye"></i> Preview</button>
+                    <button class="btn btn-success" onclick="saveItinerary()"><i class="fas fa-save"></i> Save</button>
+                </div>
+            </div>
+            
+            <div class="itinerary-builder">
+                <div class="stops-panel">
+                    <h3 class="section-title">Trip Stops</h3>
+                    <button class="btn btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="addStop()">
+                        <i class="fas fa-plus"></i> Add Stop
+                    </button>
+                    
+                    <div class="stops-list" id="stopsList">
+                        <!-- Stops will be added here dynamically -->
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--light-gray);">
+                        <h4 style="margin-bottom: 10px;">Trip Summary</h4>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Duration:</span>
+                            <span style="font-weight: 600;">15 days</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Cities:</span>
+                            <span style="font-weight: 600;">4 cities</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Activities:</span>
+                            <span style="font-weight: 600;">24 activities</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="activities-panel">
+                    <div class="day-selector" id="daySelector">
+                        <!-- Day buttons will be added here dynamically -->
+                    </div>
+                    
+                    <div class="day-view" id="dayView">
+                        <div class="day-header">
+                            <span>Day 1: Rome - June 15</span>
+                            <button class="btn btn-accent" style="padding: 8px 16px; font-size: 14px;" onclick="addActivity()">
+                                <i class="fas fa-plus"></i> Add Activity
+                            </button>
+                        </div>
+                        
+                        <div id="activitiesList">
+                            <!-- Activities will be added here dynamically -->
+                        </div>
+                    </div>
+                    
+                    <div class="add-activity-form" id="addActivityForm" style="display: none;">
+                        <h4 style="margin-bottom: 15px;">Add New Activity</h4>
+                        <div class="form-row">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Activity Name</label>
+                                <input type="text" class="form-control" id="activityName" placeholder="e.g., Colosseum Tour">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Time</label>
+                                <input type="time" class="form-control" id="activityTime" value="09:00">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Duration (hours)</label>
+                                <input type="number" class="form-control" id="activityDuration" min="0.5" max="24" step="0.5" value="2">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Cost ($)</label>
+                                <input type="number" class="form-control" id="activityCost" min="0" value="50">
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Description</label>
+                            <textarea class="form-control" id="activityDescription" rows="2" placeholder="Describe the activity..."></textarea>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="saveActivity()">Save Activity</button>
+                            <button class="btn btn-secondary" onclick="cancelAddActivity()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        let currentDay = 1;
+        let stops = [
+            { id: 1, city: "Rome, Italy", dates: "Jun 15-18, 2023", days: 3 },
+            { id: 2, city: "Florence, Italy", dates: "Jun 19-21, 2023", days: 3 },
+            { id: 3, city: "Venice, Italy", dates: "Jun 22-24, 2023", days: 3 },
+            { id: 4, city: "Milan, Italy", dates: "Jun 25-30, 2023", days: 6 }
+        ];
+        
+        let activities = {
+            1: [
+                { id: 1, name: "Colosseum Tour", time: "09:00", duration: 2, cost: 50, description: "Guided tour of ancient Roman amphitheater" },
+                { id: 2, name: "Roman Forum Visit", time: "11:30", duration: 1.5, cost: 25, description: "Explore the heart of ancient Rome" },
+                { id: 3, name: "Lunch at Trattoria", time: "13:00", duration: 1, cost: 30, description: "Traditional Italian lunch in local restaurant" },
+                { id: 4, name: "Vatican City & Sistine Chapel", time: "15:00", duration: 3, cost: 65, description: "Tour of Vatican Museums and Michelangelo's masterpiece" }
+            ],
+            2: [
+                { id: 5, name: "Piazza Navona", time: "10:00", duration: 1, cost: 0, description: "Explore famous square with fountains" },
+                { id: 6, name: "Pantheon Visit", time: "11:30", duration: 1, cost: 0, description: "Ancient Roman temple turned church" }
+            ]
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderStops();
+            renderDaySelector();
+            renderActivities();
+        });
+        
+        // Render stops
+        function renderStops() {
+            const stopsList = document.getElementById('stopsList');
+            stopsList.innerHTML = '';
+            
+            stops.forEach(stop => {
+                const stopElement = document.createElement('div');
+                stopElement.className = 'stop-item';
+                stopElement.setAttribute('draggable', 'true');
+                stopElement.setAttribute('data-id', stop.id);
+                stopElement.innerHTML = `
+                    <h5>${stop.city}</h5>
+                    <p>${stop.dates} (${stop.days} days)</p>
+                    <div class="stop-actions">
+                        <button class="btn btn-secondary" onclick="editStop(${stop.id})" style="padding: 5px 10px; font-size: 12px;">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-secondary" onclick="removeStop(${stop.id})" style="padding: 5px 10px; font-size: 12px;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                // Drag and drop events
+                stopElement.addEventListener('dragstart', handleDragStart);
+                stopElement.addEventListener('dragover', handleDragOver);
+                stopElement.addEventListener('drop', handleDrop);
+                stopElement.addEventListener('dragend', handleDragEnd);
+                
+                stopsList.appendChild(stopElement);
+            });
+        }
+        
+        // Drag and drop functionality
+        let draggedItem = null;
+        
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (draggedItem !== this) {
+                const stopsList = document.getElementById('stopsList');
+                const children = Array.from(stopsList.children);
+                const draggedIndex = children.indexOf(draggedItem);
+                const targetIndex = children.indexOf(this);
+                
+                if (draggedIndex < targetIndex) {
+                    stopsList.insertBefore(draggedItem, this.nextSibling);
+                } else {
+                    stopsList.insertBefore(draggedItem, this);
+                }
+                
+                // Update stops array order
+                const draggedStop = stops[draggedIndex];
+                stops.splice(draggedIndex, 1);
+                stops.splice(targetIndex, 0, draggedStop);
+            }
+            
+            return false;
+        }
+        
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            draggedItem = null;
+        }
+        
+        // Render day selector
+        function renderDaySelector() {
+            const daySelector = document.getElementById('daySelector');
+            daySelector.innerHTML = '';
+            
+            for (let i = 1; i <= 15; i++) {
+                const dayBtn = document.createElement('button');
+                dayBtn.className = `day-btn ${i === currentDay ? 'active' : ''}`;
+                dayBtn.textContent = `Day ${i}`;
+                dayBtn.addEventListener('click', () => selectDay(i));
+                daySelector.appendChild(dayBtn);
+            }
+        }
+        
+        // Select day
+        function selectDay(day) {
+            currentDay = day;
+            document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update day header
+            const dayHeader = document.querySelector('.day-header span');
+            let dayText = `Day ${day}: `;
+            
+            if (day <= 3) dayText += `Rome - June ${14 + day}`;
+            else if (day <= 6) dayText += `Florence - June ${14 + day}`;
+            else if (day <= 9) dayText += `Venice - June ${14 + day}`;
+            else dayText += `Milan - June ${14 + day}`;
+            
+            dayHeader.textContent = dayText;
+            
+            renderActivities();
+        }
+        
+        // Render activities
+        function renderActivities() {
+            const activitiesList = document.getElementById('activitiesList');
+            activitiesList.innerHTML = '';
+            
+            const dayActivities = activities[currentDay] || [];
+            
+            if (dayActivities.length === 0) {
+                activitiesList.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: var(--gray);">
+                        <i class="fas fa-calendar-plus" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <p>No activities planned for this day yet.</p>
+                        <button class="btn btn-accent" style="margin-top: 15px;" onclick="addActivity()">
+                            <i class="fas fa-plus"></i> Add First Activity
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort activities by time
+            dayActivities.sort((a, b) => a.time.localeCompare(b.time));
+            
+            dayActivities.forEach(activity => {
+                const activityElement = document.createElement('div');
+                activityElement.className = 'activity-item';
+                activityElement.innerHTML = `
+                    <div class="activity-time">${activity.time}</div>
+                    <div class="activity-details">
+                        <h5>${activity.name}</h5>
+                        <p>${activity.description}</p>
+                    </div>
+                    <div class="activity-cost">$${activity.cost}</div>
+                    <div class="activity-actions">
+                        <button class="btn btn-secondary" onclick="editActivity(${activity.id})" style="padding: 8px 12px;">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-secondary" onclick="removeActivity(${activity.id})" style="padding: 8px 12px;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                activitiesList.appendChild(activityElement);
+            });
+        }
+        
+        // Add stop
+        function addStop() {
+            const city = prompt('Enter city name (e.g., Rome, Italy):');
+            if (!city) return;
+            
+            const days = prompt('How many days will you stay here?');
+            if (!days || isNaN(days) || days < 1) {
+                alert('Please enter a valid number of days');
+                return;
+            }
+            
+            const newId = stops.length > 0 ? Math.max(...stops.map(s => s.id)) + 1 : 1;
+            const newStop = {
+                id: newId,
+                city: city,
+                dates: 'TBD',
+                days: parseInt(days)
+            };
+            
+            stops.push(newStop);
+            renderStops();
+            alert(`Added ${city} to your itinerary`);
+        }
+        
+        // Edit stop
+        function editStop(id) {
+            const stop = stops.find(s => s.id === id);
+            if (!stop) return;
+            
+            const newCity = prompt('Edit city name:', stop.city);
+            if (newCity) stop.city = newCity;
+            
+            const newDays = prompt('Edit number of days:', stop.days);
+            if (newDays && !isNaN(newDays) && newDays > 0) {
+                stop.days = parseInt(newDays);
+            }
+            
+            renderStops();
+        }
+        
+        // Remove stop
+        function removeStop(id) {
+            if (!confirm('Are you sure you want to remove this stop? All activities in this city will be deleted.')) {
+                return;
+            }
+            
+            stops = stops.filter(s => s.id !== id);
+            renderStops();
+        }
+        
+        // Show add activity form
+        function addActivity() {
+            document.getElementById('addActivityForm').style.display = 'block';
+            document.getElementById('activityName').focus();
+        }
+        
+        // Save activity
+        function saveActivity() {
+            const name = document.getElementById('activityName').value;
+            const time = document.getElementById('activityTime').value;
+            const duration = parseFloat(document.getElementById('activityDuration').value);
+            const cost = parseFloat(document.getElementById('activityCost').value);
+            const description = document.getElementById('activityDescription').value;
+            
+            if (!name) {
+                alert('Please enter an activity name');
+                return;
+            }
+            
+            if (!activities[currentDay]) {
+                activities[currentDay] = [];
+            }
+            
+            const newId = activities[currentDay].length > 0 ? 
+                Math.max(...activities[currentDay].map(a => a.id)) + 1 : 1;
+            
+            const newActivity = {
+                id: newId,
+                name: name,
+                time: time,
+                duration: duration,
+                cost: cost,
+                description: description
+            };
+            
+            activities[currentDay].push(newActivity);
+            
+            // Clear form
+            document.getElementById('activityName').value = '';
+            document.getElementById('activityTime').value = '09:00';
+            document.getElementById('activityDuration').value = '2';
+            document.getElementById('activityCost').value = '50';
+            document.getElementById('activityDescription').value = '';
+            
+            document.getElementById('addActivityForm').style.display = 'none';
+            renderActivities();
+        }
+        
+        // Cancel add activity
+        function cancelAddActivity() {
+            document.getElementById('addActivityForm').style.display = 'none';
+        }
+        
+        // Edit activity
+        function editActivity(id) {
+            const dayActivities = activities[currentDay];
+            if (!dayActivities) return;
+            
+            const activity = dayActivities.find(a => a.id === id);
+            if (!activity) return;
+            
+            const newName = prompt('Edit activity name:', activity.name);
+            if (newName) activity.name = newName;
+            
+            const newTime = prompt('Edit time (HH:MM):', activity.time);
+            if (newTime) activity.time = newTime;
+            
+            const newCost = prompt('Edit cost ($):', activity.cost);
+            if (newCost && !isNaN(newCost)) activity.cost = parseFloat(newCost);
+            
+            const newDesc = prompt('Edit description:', activity.description);
+            if (newDesc !== null) activity.description = newDesc;
+            
+            renderActivities();
+        }
+        
+        // Remove activity
+        function removeActivity(id) {
+            if (!confirm('Are you sure you want to remove this activity?')) {
+                return;
+            }
+            
+            const dayActivities = activities[currentDay];
+            if (!dayActivities) return;
+            
+            activities[currentDay] = dayActivities.filter(a => a.id !== id);
+            renderActivities();
+        }
+        
+        // Save itinerary
+        function saveItinerary() {
+            alert('Itinerary saved successfully!');
+            // In a real app, this would send data to a server
+        }
+    </script>
+</body>
+</html>

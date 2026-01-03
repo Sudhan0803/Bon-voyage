@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BON-VOYAGE | City Search</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --shadow: 0 10px 20px rgba(0,0,0,0.08);
+            --shadow-light: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 25px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+        }
+        
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 26px;
+            margin-left: 12px;
+            letter-spacing: 1px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+        
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--accent);
+        }
+        
+        .nav-link i {
+            width: 24px;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        .user-profile {
+            padding: 20px 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+        
+        .user-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .search-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            padding: 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+        
+        .filter-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tag {
+            padding: 8px 16px;
+            background-color: var(--light);
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-tag:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .filter-tag.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .city-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease;
+        }
+        
+        .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        
+        .city-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .city-rating {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .city-content {
+            padding: 20px;
+        }
+        
+        .city-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .city-name h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .city-name p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .city-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .city-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--dark);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        .city-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .tag {
+            padding: 4px 10px;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+        
+        .no-results i {
+            font-size: 64px;
+            color: var(--light-gray);
+            margin-bottom: 20px;
+        }
+        
+        .no-results h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .no-results p {
+            color: var(--gray);
+            margin-bottom: 30px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .logo h1, .nav-link span, .user-info {
+                display: none;
+            }
+            
+            .logo {
+                justify-content: center;
+                padding: 0 0 30px;
+            }
+            
+            .nav-link {
+                justify-content: center;
+                padding: 15px 0;
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .user-profile {
+                justify-content: center;
+                padding: 20px 0;
+            }
+            
+            .user-avatar {
+                margin-right: 0;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .cities-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 70px;
+                flex-direction: row;
+                padding: 0;
+            }
+            
+            .logo {
+                padding: 0 20px;
+                border-bottom: none;
+                margin-bottom: 0;
+                border-right: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            .nav-menu {
+                display: flex;
+                flex-grow: 1;
+                justify-content: space-around;
+            }
+            
+            .nav-item {
+                margin-bottom: 0;
+            }
+            
+            .nav-link {
+                border-left: none;
+                border-bottom: 4px solid transparent;
+                padding: 0 15px;
+                height: 70px;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            .nav-link:hover, .nav-link.active {
+                border-left-color: transparent;
+                border-bottom-color: var(--accent);
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                margin-bottom: 5px;
+                font-size: 18px;
+            }
+            
+            .nav-link span {
+                display: block;
+                font-size: 12px;
+            }
+            
+            .user-profile {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .cities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-plane-departure"></i>
+                <h1>BON-VOYAGE</h1>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li class="nav-item"><a href="create-trip.html" class="nav-link"><i class="fas fa-plus-circle"></i> <span>Create Trip</span></a></li>
+                <li class="nav-item"><a href="my-trips.html" class="nav-link"><i class="fas fa-suitcase"></i> <span>My Trips</span></a></li>
+                <li class="nav-item"><a href="itinerary-builder.html" class="nav-link"><i class="fas fa-route"></i> <span>Itinerary Builder</span></a></li>
+                <li class="nav-item"><a href="itinerary-view.html" class="nav-link"><i class="fas fa-binoculars"></i> <span>Itinerary View</span></a></li>
+                <li class="nav-item"><a href="city-search.html" class="nav-link active"><i class="fas fa-city"></i> <span>City Search</span></a></li>
+                <li class="nav-item"><a href="activity-search.html" class="nav-link"><i class="fas fa-hiking"></i> <span>Activity Search</span></a></li>
+                <li class="nav-item"><a href="budget.html" class="nav-link"><i class="fas fa-chart-pie"></i> <span>Trip Budget</span></a></li>
+                <li class="nav-item"><a href="calendar.html" class="nav-link"><i class="fas fa-calendar-alt"></i> <span>Calendar</span></a></li>
+                <li class="nav-item"><a href="public-itinerary.html" class="nav-link"><i class="fas fa-share-alt"></i> <span>Public Itinerary</span></a></li>
+                <li class="nav-item"><a href="profile.html" class="nav-link"><i class="fas fa-user-cog"></i> <span>Profile</span></a></li>
+                <li class="nav-item"><a href="admin.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> <span>Admin</span></a></li>
+            </ul>
+            
+            <div class="user-profile">
+                <div class="user-avatar">JS</div>
+                <div class="user-info">
+                    <h4>John Smith</h4>
+                    <p>Travel Enthusiast</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <div>
+                    <h1 class="page-title">City Search</h1>
+                    <p class="page-subtitle">Discover and add cities to your trips</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="showAdvancedFilters()">
+                        <i class="fas fa-sliders-h"></i> Advanced Filters
+                    </button>
+                </div>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search for cities, countries, or regions...">
+                    <button class="btn btn-primary" onclick="searchCities()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                
+                <div class="filter-tags" id="filterTags">
+                    <!-- Filter tags will be added here dynamically -->
+                </div>
+            </div>
+            
+            <div class="cities-grid" id="citiesGrid">
+                <!-- City cards will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample city data
+        const cities = [
+            {
+                id: 1,
+                name: "Paris",
+                country: "France",
+                region: "Europe",
+                rating: 9.5,
+                price: "$$$$",
+                costIndex: 4,
+                popularity: 9.8,
+                description: "City of Light with iconic landmarks and exquisite cuisine",
+                tags: ["Romantic", "Historic", "Food", "Art"],
+                imageColor: "linear-gradient(135deg, #4361ee, #3a56d4)"
+            },
+            {
+                id: 2,
+                name: "Tokyo",
+                country: "Japan",
+                region: "Asia",
+                rating: 9.7,
+                price: "$$$",
+                costIndex: 3,
+                popularity: 9.5,
+                description: "Vibrant metropolis blending tradition with cutting-edge technology",
+                tags: ["Modern", "Traditional", "Food", "Technology"],
+                imageColor: "linear-gradient(135deg, #7209b7, #5a0891)"
+            },
+            {
+                id: 3,
+                name: "Bali",
+                country: "Indonesia",
+                region: "Asia",
+                rating: 9.2,
+                price: "$$",
+                costIndex: 2,
+                popularity: 9.3,
+                description: "Tropical paradise with lush landscapes and spiritual retreats",
+                tags: ["Beach", "Relaxation", "Spiritual", "Nature"],
+                imageColor: "linear-gradient(135deg, #f72585, #e11576)"
+            },
+            {
+                id: 4,
+                name: "New York",
+                country: "USA",
+                region: "North America",
+                rating: 9.4,
+                price: "$$$$",
+                costIndex: 4,
+                popularity: 9.6,
+                description: "The city that never sleeps with endless entertainment",
+                tags: ["Modern", "Shopping", "Food", "Entertainment"],
+                imageColor: "linear-gradient(135deg, #4cc9f0, #3ab5d8)"
+            },
+            {
+                id: 5,
+                name: "Rome",
+                country: "Italy",
+                region: "Europe",
+                rating: 9.3,
+                price: "$$$",
+                costIndex: 3,
+                popularity: 9.4,
+                description: "Eternal city with ancient history and incredible food",
+                tags: ["Historic", "Food", "Art", "Architecture"],
+                imageColor: "linear-gradient(135deg, #2a9d8f, #21867a)"
+            },
+            {
+                id: 6,
+                name: "Bangkok",
+                country: "Thailand",
+                region: "Asia",
+                rating: 8.9,
+                price: "$",
+                costIndex: 1,
+                popularity: 9.1,
+                description: "Bustling city with vibrant street life and temples",
+                tags: ["Affordable", "Food", "Temples", "Shopping"],
+                imageColor: "linear-gradient(135deg, #f4a261, #e76f51)"
+            },
+            {
+                id: 7,
+                name: "Sydney",
+                country: "Australia",
+                region: "Oceania",
+                rating: 9.1,
+                price: "$$$",
+                costIndex: 3,
+                popularity: 8.9,
+                description: "Coastal city with iconic opera house and beaches",
+                tags: ["Beach", "Modern", "Nature", "Food"],
+                imageColor: "linear-gradient(135deg, #e9c46a, #d4a017)"
+            },
+            {
+                id: 8,
+                name: "Cape Town",
+                country: "South Africa",
+                region: "Africa",
+                rating: 9.0,
+                price: "$$",
+                costIndex: 2,
+                popularity: 8.8,
+                description: "Stunning coastal city with Table Mountain",
+                tags: ["Nature", "Adventure", "Beach", "Wildlife"],
+                imageColor: "linear-gradient(135deg, #264653, #1a2f3a)"
+            }
+        ];
+        
+        // Available filters
+        const filters = [
+            { id: 'all', name: 'All Regions' },
+            { id: 'europe', name: 'Europe' },
+            { id: 'asia', name: 'Asia' },
+            { id: 'north-america', name: 'North America' },
+            { id: 'affordable', name: 'Affordable ($)' },
+            { id: 'popular', name: 'Most Popular' },
+            { id: 'beach', name: 'Beach Destinations' },
+            { id: 'historic', name: 'Historic Cities' }
+        ];
+        
+        let currentFilter = 'all';
+        let searchQuery = '';
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFilterTags();
+            renderCities();
+        });
+        
+        // Render filter tags
+        function renderFilterTags() {
+            const filterTags = document.getElementById('filterTags');
+            filterTags.innerHTML = filters.map(filter => `
+                <div class="filter-tag ${filter.id === currentFilter ? 'active' : ''}" 
+                     data-filter="${filter.id}" 
+                     onclick="setFilter('${filter.id}')">
+                    ${filter.name}
+                </div>
+            `).join('');
+        }
+        
+        // Set filter
+        function setFilter(filterId) {
+            currentFilter = filterId;
+            renderFilterTags();
+            renderCities();
+        }
+        
+        // Render cities
+        function renderCities() {
+            const citiesGrid = document.getElementById('citiesGrid');
+            
+            // Filter cities
+            let filteredCities = cities;
+            
+            // Apply search filter
+            if (searchQuery) {
+                filteredCities = filteredCities.filter(city => 
+                    city.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    city.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    city.description.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            }
+            
+            // Apply region filter
+            if (currentFilter !== 'all') {
+                switch(currentFilter) {
+                    case 'europe':
+                        filteredCities = filteredCities.filter(city => city.region === 'Europe');
+                        break;
+                    case 'asia':
+                        filteredCities = filteredCities.filter(city => city.region === 'Asia');
+                        break;
+                    case 'north-america':
+                        filteredCities = filteredCities.filter(city => city.region === 'North America');
+                        break;
+                    case 'affordable':
+                        filteredCities = filteredCities.filter(city => city.costIndex <= 2);
+                        break;
+                    case 'popular':
+                        filteredCities = filteredCities.sort((a, b) => b.popularity - a.popularity);
+                        break;
+                    case 'beach':
+                        filteredCities = filteredCities.filter(city => city.tags.includes('Beach'));
+                        break;
+                    case 'historic':
+                        filteredCities = filteredCities.filter(city => city.tags.includes('Historic'));
+                        break;
+                }
+            }
+            
+            if (filteredCities.length === 0) {
+                citiesGrid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>No cities found</h3>
+                        <p>Try adjusting your search or filters to find what you're looking for.</p>
+                        <button class="btn btn-primary" onclick="resetFilters()">
+                            <i class="fas fa-redo"></i> Reset Filters
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            citiesGrid.innerHTML = filteredCities.map(city => `
+                <div class="city-card">
+                    <div class="city-image" style="background: ${city.imageColor};">
+                        <div class="city-rating">
+                            <i class="fas fa-star"></i> ${city.rating}
+                        </div>
+                    </div>
+                    <div class="city-content">
+                        <div class="city-header">
+                            <div class="city-name">
+                                <h4>${city.name}</h4>
+                                <p>${city.country} • ${city.region}</p>
+                            </div>
+                            <div class="city-price">${city.price}</div>
+                        </div>
+                        
+                        <p style="font-size: 14px; color: var(--gray); margin-bottom: 15px;">${city.description}</p>
+                        
+                        <div class="city-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${city.costIndex}/5</div>
+                                <div class="stat-label">Cost Index</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${city.popularity}/10</div>
+                                <div class="stat-label">Popularity</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${city.rating}/10</div>
+                                <div class="stat-label">Rating</div>
+                            </div>
+                        </div>
+                        
+                        <div class="city-tags">
+                            ${city.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" style="flex-grow: 1;" onclick="addCityToTrip(${city.id})">
+                                <i class="fas fa-plus"></i> Add to Trip
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="viewCityDetails(${city.id})">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Search cities
+        function searchCities() {
+            const searchInput = document.getElementById('searchInput');
+            searchQuery = searchInput.value.trim();
+            renderCities();
+        }
+        
+        // Reset filters
+        function resetFilters() {
+            currentFilter = 'all';
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            renderFilterTags();
+            renderCities();
+        }
+        
+        // Show advanced filters
+        function showAdvancedFilters() {
+            alert('Advanced Filters:\n\n• Price Range: $ - $$$$$\n• Rating: 1-10\n• Best Time to Visit\n• Climate\n• Language\n• Visa Requirements\n• Safety Rating');
+        }
+        
+        // Add city to trip
+        function addCityToTrip(cityId) {
+            const city = cities.find(c => c.id === cityId);
+            if (!city) return;
+            
+            // Show trip selection modal
+            alert(`Add "${city.name}, ${city.country}" to which trip?\n\n1. Italian Adventure\n2. Japanese Discovery\n3. Create New Trip`);
+            
+            const tripChoice = prompt('Enter trip number or type "new" to create a new trip:');
+            
+            if (tripChoice === '1') {
+                alert(`Added ${city.name} to Italian Adventure!`);
+            } else if (tripChoice === '2') {
+                alert(`Added ${city.name} to Japanese Discovery!`);
+            } else if (tripChoice === 'new' || tripChoice === '3') {
+                alert(`Creating new trip with ${city.name}...`);
+                window.location.href = 'create-trip.html';
+            }
+        }
+        
+        // View city details
+        function viewCityDetails(cityId) {
+            const city = cities.find(c => c.id === cityId);
+            if (!city) return;
+            
+            alert(`City Details: ${city.name}, ${city.country}\n\nRegion: ${city.region}\nRating: ${city.rating}/10\nPrice Level: ${city.price}\nCost Index: ${city.costIndex}/5\nPopularity: ${city.popularity}/10\n\nDescription: ${city.description}\n\nTags: ${city.tags.join(', ')}\n\nWould you like to see more information?`);
+            
+            // In a real app, this would open a detailed city view
+        }
+        
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchCities();
+            }
+        });
+    </script>
+</body>
+</html>

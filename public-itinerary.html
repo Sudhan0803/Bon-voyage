@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BON-VOYAGE | Public Itinerary</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --shadow: 0 10px 20px rgba(0,0,0,0.08);
+            --shadow-light: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .public-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .public-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-right: 15px;
+        }
+        
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 36px;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+        
+        .itinerary-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .itinerary-subtitle {
+            font-size: 16px;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+        
+        .share-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-accent:hover {
+            background-color: #e11576;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .trip-overview {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 40px;
+        }
+        
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .overview-item {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+        }
+        
+        .overview-item .value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .overview-item .label {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .itinerary-content {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 992px) {
+            .itinerary-content {
+                flex-direction: column;
+            }
+        }
+        
+        .stops-panel {
+            flex: 0 0 350px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .stops-list {
+            margin-top: 20px;
+        }
+        
+        .stop-item {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .stop-item h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .stop-item p {
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        .activities-panel {
+            flex-grow: 1;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .day-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .day-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--light-gray);
+            background-color: white;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .day-btn:hover {
+            background-color: var(--light);
+        }
+        
+        .day-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .day-view {
+            margin-bottom: 30px;
+        }
+        
+        .day-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            background-color: white;
+        }
+        
+        .activity-time {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 100px;
+        }
+        
+        .activity-details {
+            flex-grow: 1;
+        }
+        
+        .activity-details h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .activity-details p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .activity-cost {
+            font-weight: 600;
+            color: var(--success);
+            margin-right: 15px;
+        }
+        
+        .trip-map {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 40px;
+        }
+        
+        .map-placeholder {
+            height: 300px;
+            background: linear-gradient(135deg, #4361ee, #3a56d4);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        
+        .creator-info {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .creator-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 32px;
+            color: white;
+        }
+        
+        .creator-details h4 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .creator-details p {
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+        
+        .creator-stats {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .creator-stat {
+            text-align: center;
+        }
+        
+        .creator-stat .value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .creator-stat .label {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        .call-to-action {
+            text-align: center;
+            padding: 40px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+        }
+        
+        .call-to-action h3 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .call-to-action p {
+            color: var(--gray);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .social-share {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .social-fb { background-color: #3b5998; }
+        .social-tw { background-color: #1da1f2; }
+        .social-in { background-color: #e1306c; }
+        .social-wa { background-color: #25d366; }
+        .social-link { background-color: var(--primary); }
+        
+        .url-share {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .url-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .url-copy {
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .public-container {
+                padding: 20px 15px;
+            }
+            
+            .itinerary-title {
+                font-size: 28px;
+            }
+            
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .share-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .share-actions .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .creator-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .url-share {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="public-container">
+        <div class="public-header">
+            <div class="logo">
+                <i class="fas fa-plane-departure"></i>
+                <h1>BON-VOYAGE</h1>
+            </div>
+            
+            <h1 class="itinerary-title">Italian Adventure</h1>
+            <p class="itinerary-subtitle">June 15-30, 2023 • Shared by John Smith</p>
+            
+            <div class="share-actions">
+                <button class="btn btn-accent" onclick="copyTrip()">
+                    <i class="fas fa-copy"></i> Copy This Trip
+                </button>
+                <button class="btn btn-primary" onclick="shareOnSocial()">
+                    <i class="fas fa-share-alt"></i> Share Itinerary
+                </button>
+                <button class="btn btn-secondary" onclick="viewInApp()">
+                    <i class="fas fa-external-link-alt"></i> View in App
+                </button>
+            </div>
+        </div>
+        
+        <div class="trip-overview">
+            <h3 class="section-title">Trip Overview</h3>
+            <div class="overview-grid">
+                <div class="overview-item">
+                    <div class="value">15</div>
+                    <div class="label">Total Days</div>
+                </div>
+                <div class="overview-item">
+                    <div class="value">4</div>
+                    <div class="label">Cities</div>
+                </div>
+                <div class="overview-item">
+                    <div class="value">24</div>
+                    <div class="label">Activities</div>
+                </div>
+                <div class="overview-item">
+                    <div class="value">$2,400</div>
+                    <div class="label">Estimated Budget</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="itinerary-content">
+            <div class="stops-panel">
+                <h3 class="section-title">Trip Itinerary</h3>
+                
+                <div class="stops-list">
+                    <div class="stop-item">
+                        <h5>Rome, Italy</h5>
+                        <p>Jun 15-18, 2023 (3 days)</p>
+                        <p style="margin-top: 8px; font-size: 12px; color: var(--primary);">
+                            <i class="fas fa-map-marker-alt"></i> 8 activities planned
+                        </p>
+                    </div>
+                    <div class="stop-item">
+                        <h5>Florence, Italy</h5>
+                        <p>Jun 19-21, 2023 (3 days)</p>
+                        <p style="margin-top: 8px; font-size: 12px; color: var(--primary);">
+                            <i class="fas fa-map-marker-alt"></i> 6 activities planned
+                        </p>
+                    </div>
+                    <div class="stop-item">
+                        <h5>Venice, Italy</h5>
+                        <p>Jun 22-24, 2023 (3 days)</p>
+                        <p style="margin-top: 8px; font-size: 12px; color: var(--primary);">
+                            <i class="fas fa-map-marker-alt"></i> 5 activities planned
+                        </p>
+                    </div>
+                    <div class="stop-item">
+                        <h5>Milan, Italy</h5>
+                        <p>Jun 25-30, 2023 (6 days)</p>
+                        <p style="margin-top: 8px; font-size: 12px; color: var(--primary);">
+                            <i class="fas fa-map-marker-alt"></i> 10 activities planned
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--light-gray);">
+                    <h4 style="margin-bottom: 10px;">Quick Stats</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Best time to visit:</span>
+                        <span style="font-weight: 600;">Spring/Fall</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Travel style:</span>
+                        <span style="font-weight: 600;">Cultural</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Difficulty:</span>
+                        <span style="font-weight: 600;">Moderate</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="activities-panel">
+                <div class="day-selector" id="daySelector">
+                    <!-- Day buttons will be added here dynamically -->
+                </div>
+                
+                <div class="day-view">
+                    <div class="day-header" id="dayHeader">
+                        Day 1: Rome - June 15
+                    </div>
+                    
+                    <div id="activitiesList">
+                        <!-- Activities will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="trip-map">
+            <h3 class="section-title">Trip Route Map</h3>
+            <p>This trip takes you through the beautiful cities of Italy:</p>
+            <div class="map-placeholder">
+                <div style="text-align: center;">
+                    <i class="fas fa-map-marked-alt" style="font-size: 48px; margin-bottom: 15px;"></i>
+                    <p>Rome → Florence → Venice → Milan</p>
+                    <p style="font-size: 14px; margin-top: 10px;">View interactive map in the app</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="creator-info">
+            <div class="creator-avatar">JS</div>
+            <div class="creator-details">
+                <h4>John Smith</h4>
+                <p>Travel Enthusiast • 15 countries visited</p>
+                <div class="creator-stats">
+                    <div class="creator-stat">
+                        <div class="value">5</div>
+                        <div class="label">Trips Shared</div>
+                    </div>
+                    <div class="creator-stat">
+                        <div class="value">142</div>
+                        <div class="label">Followers</div>
+                    </div>
+                    <div class="creator-stat">
+                        <div class="value">4.8</div>
+                        <div class="label">Avg. Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="call-to-action">
+            <h3>Ready to Plan Your Own Adventure?</h3>
+            <p>Create your personalized version of this trip or get inspiration for your next journey. Sign up for free to start planning!</p>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 30px;">
+                <button class="btn btn-primary btn-lg" onclick="signUp()">
+                    <i class="fas fa-user-plus"></i> Sign Up Free
+                </button>
+                <button class="btn btn-secondary btn-lg" onclick="browseMore()">
+                    <i class="fas fa-compass"></i> Browse More Trips
+                </button>
+            </div>
+            
+            <div class="social-share">
+                <div class="social-btn social-fb" onclick="shareFacebook()">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <div class="social-btn social-tw" onclick="shareTwitter()">
+                    <i class="fab fa-twitter"></i>
+                </div>
+                <div class="social-btn social-in" onclick="shareInstagram()">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <div class="social-btn social-wa" onclick="shareWhatsApp()">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="social-btn social-link" onclick="copyLink()">
+                    <i class="fas fa-link"></i>
+                </div>
+            </div>
+            
+            <div class="url-share">
+                <input type="text" class="url-input" id="shareUrl" value="https://bonvoyage.app/share/italian-adventure-2023" readonly>
+                <button class="url-copy" onclick="copyUrl()">Copy Link</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample activities data
+        const activities = {
+            1: [
+                { name: "Colosseum Tour", time: "09:00", cost: 50, description: "Guided tour of ancient Roman amphitheater" },
+                { name: "Roman Forum Visit", time: "11:30", cost: 25, description: "Explore the heart of ancient Rome" },
+                { name: "Lunch at Trattoria", time: "13:00", cost: 30, description: "Traditional Italian lunch in local restaurant" },
+                { name: "Vatican City & Sistine Chapel", time: "15:00", cost: 65, description: "Tour of Vatican Museums and Michelangelo's masterpiece" }
+            ],
+            2: [
+                { name: "Piazza Navona", time: "10:00", cost: 0, description: "Explore famous square with fountains" },
+                { name: "Pantheon Visit", time: "11:30", cost: 0, description: "Ancient Roman temple turned church" },
+                { name: "Spanish Steps", time: "14:00", cost: 0, description: "Historic steps with great views" }
+            ],
+            3: [
+                { name: "Trevi Fountain", time: "09:30", cost: 0, description: "Make a wish at the famous fountain" },
+                { name: "Borghese Gallery", time: "11:00", cost: 40, description: "Art museum with Renaissance masterpieces" }
+            ]
+        };
+        
+        let currentDay = 1;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDaySelector();
+            renderActivities();
+        });
+        
+        // Render day selector
+        function renderDaySelector() {
+            const daySelector = document.getElementById('daySelector');
+            daySelector.innerHTML = '';
+            
+            for (let i = 1; i <= 15; i++) {
+                const dayBtn = document.createElement('button');
+                dayBtn.className = `day-btn ${i === currentDay ? 'active' : ''}`;
+                dayBtn.textContent = `Day ${i}`;
+                dayBtn.addEventListener('click', () => selectDay(i));
+                daySelector.appendChild(dayBtn);
+            }
+        }
+        
+        // Select day
+        function selectDay(day) {
+            currentDay = day;
+            document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update day header
+            const dayHeader = document.getElementById('dayHeader');
+            let dayText = `Day ${day}: `;
+            
+            if (day <= 3) dayText += `Rome - June ${14 + day}`;
+            else if (day <= 6) dayText += `Florence - June ${14 + day}`;
+            else if (day <= 9) dayText += `Venice - June ${14 + day}`;
+            else dayText += `Milan - June ${14 + day}`;
+            
+            dayHeader.textContent = dayText;
+            
+            renderActivities();
+        }
+        
+        // Render activities
+        function renderActivities() {
+            const activitiesList = document.getElementById('activitiesList');
+            const dayActivities = activities[currentDay] || [];
+            
+            if (dayActivities.length === 0) {
+                activitiesList.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: var(--gray);">
+                        <i class="fas fa-umbrella-beach" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <p>Free day to explore at your own pace!</p>
+                        <p style="font-size: 14px; margin-top: 10px;">No scheduled activities for this day.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort activities by time
+            dayActivities.sort((a, b) => a.time.localeCompare(b.time));
+            
+            activitiesList.innerHTML = dayActivities.map(activity => `
+                <div class="activity-item">
+                    <div class="activity-time">${activity.time}</div>
+                    <div class="activity-details">
+                        <h5>${activity.name}</h5>
+                        <p>${activity.description}</p>
+                    </div>
+                    <div class="activity-cost">$${activity.cost}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Copy trip
+        function copyTrip() {
+            alert('Copying this trip to your account...\n\nYou will be redirected to sign in or create an account.');
+            // In a real app, this would redirect to signup/login with trip copying
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+        }
+        
+        // Share on social
+        function shareOnSocial() {
+            alert('Share this itinerary on social media or copy the link to share with friends!');
+        }
+        
+        // View in app
+        function viewInApp() {
+            alert('For the best experience, view this itinerary in the BON-VOYAGE app!\n\nDownload our app or sign in to your account.');
+        }
+        
+        // Sign up
+        function signUp() {
+            window.location.href = 'login.html';
+        }
+        
+        // Browse more trips
+        function browseMore() {
+            alert('Browse more public itineraries from our community!');
+            // In a real app, this would show more trips
+        }
+        
+        // Social sharing functions
+        function shareFacebook() {
+            const url = encodeURIComponent('https://bonvoyage.app/share/italian-adventure-2023');
+            const text = encodeURIComponent('Check out this amazing Italian Adventure itinerary on BON-VOYAGE!');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+        }
+        
+        function shareTwitter() {
+            const text = encodeURIComponent('Amazing Italian Adventure itinerary on @BonVoyageApp!');
+            const url = encodeURIComponent('https://bonvoyage.app/share/italian-adventure-2023');
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        }
+        
+        function shareInstagram() {
+            alert('Share on Instagram:\n\n1. Take a screenshot of this itinerary\n2. Open Instagram\n3. Post the screenshot with #BonVoyageTravel');
+        }
+        
+        function shareWhatsApp() {
+            const text = encodeURIComponent('Check out this Italian Adventure itinerary: https://bonvoyage.app/share/italian-adventure-2023');
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+        
+        // Copy link
+        function copyLink() {
+            copyUrl();
+        }
+        
+        // Copy URL
+        function copyUrl() {
+            const urlInput = document.getElementById('shareUrl');
+            urlInput.select();
+            urlInput.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(urlInput.value);
+            
+            const originalText = event.target.textContent;
+            event.target.textContent = 'Copied!';
+            event.target.style.backgroundColor = '#2ecc71';
+            
+            setTimeout(() => {
+                event.target.textContent = originalText;
+                event.target.style.backgroundColor = '';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

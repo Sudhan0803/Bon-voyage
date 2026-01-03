@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BON-VOYAGE | Trip Calendar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --shadow: 0 10px 20px rgba(0,0,0,0.08);
+            --shadow-light: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 25px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+        }
+        
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 26px;
+            margin-left: 12px;
+            letter-spacing: 1px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+        
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--accent);
+        }
+        
+        .nav-link i {
+            width: 24px;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        .user-profile {
+            padding: 20px 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+        
+        .user-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .calendar-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .calendar-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .calendar-view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .view-btn {
+            padding: 8px 16px;
+            background-color: var(--light);
+            border: none;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .view-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        
+        .calendar-day {
+            min-height: 100px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: white;
+            border: 1px solid var(--light-gray);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .calendar-day.header {
+            min-height: auto;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--gray);
+            background-color: var(--light);
+            border: none;
+        }
+        
+        .calendar-day.empty {
+            background-color: var(--light);
+            border: 1px dashed var(--light-gray);
+        }
+        
+        .calendar-day.trip-day {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .calendar-day.today {
+            background-color: rgba(247, 37, 133, 0.1);
+            border-color: var(--accent);
+        }
+        
+        .calendar-day:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-light);
+        }
+        
+        .day-number {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .day-events {
+            margin-top: 5px;
+        }
+        
+        .event-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+        
+        .event-dot.activity {
+            background-color: var(--primary);
+        }
+        
+        .event-dot.travel {
+            background-color: var(--accent);
+        }
+        
+        .event-dot.food {
+            background-color: var(--success);
+        }
+        
+        .event-label {
+            font-size: 11px;
+            color: var(--gray);
+            display: block;
+            margin-top: 2px;
+        }
+        
+        .day-location {
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 500;
+            margin-top: 5px;
+        }
+        
+        .timeline-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .timeline {
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--light-gray);
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .timeline-date {
+            width: 60px;
+            text-align: center;
+            padding-top: 5px;
+        }
+        
+        .timeline-day {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+        
+        .timeline-month {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+        }
+        
+        .timeline-marker {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            border: 3px solid white;
+            position: absolute;
+            left: 21px;
+            top: 10px;
+            z-index: 1;
+        }
+        
+        .timeline-content {
+            flex-grow: 1;
+            margin-left: 40px;
+            padding: 15px;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .timeline-location {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .timeline-activities {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .activity-count {
+            display: inline-block;
+            padding: 2px 8px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .no-events {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        
+        .no-events i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .logo h1, .nav-link span, .user-info {
+                display: none;
+            }
+            
+            .logo {
+                justify-content: center;
+                padding: 0 0 30px;
+            }
+            
+            .nav-link {
+                justify-content: center;
+                padding: 15px 0;
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .user-profile {
+                justify-content: center;
+                padding: 20px 0;
+            }
+            
+            .user-avatar {
+                margin-right: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 70px;
+                flex-direction: row;
+                padding: 0;
+            }
+            
+            .logo {
+                padding: 0 20px;
+                border-bottom: none;
+                margin-bottom: 0;
+                border-right: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            .nav-menu {
+                display: flex;
+                flex-grow: 1;
+                justify-content: space-around;
+            }
+            
+            .nav-item {
+                margin-bottom: 0;
+            }
+            
+            .nav-link {
+                border-left: none;
+                border-bottom: 4px solid transparent;
+                padding: 0 15px;
+                height: 70px;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            .nav-link:hover, .nav-link.active {
+                border-left-color: transparent;
+                border-bottom-color: var(--accent);
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                margin-bottom: 5px;
+                font-size: 18px;
+            }
+            
+            .nav-link span {
+                display: block;
+                font-size: 12px;
+            }
+            
+            .user-profile {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .calendar-grid {
+                gap: 4px;
+            }
+            
+            .calendar-day {
+                min-height: 80px;
+                padding: 5px;
+                font-size: 14px;
+            }
+            
+            .day-number {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+            }
+            
+            .calendar-day {
+                min-height: 60px;
+            }
+            
+            .event-dot {
+                width: 6px;
+                height: 6px;
+            }
+            
+            .event-label, .day-location {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-plane-departure"></i>
+                <h1>BON-VOYAGE</h1>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li class="nav-item"><a href="create-trip.html" class="nav-link"><i class="fas fa-plus-circle"></i> <span>Create Trip</span></a></li>
+                <li class="nav-item"><a href="my-trips.html" class="nav-link"><i class="fas fa-suitcase"></i> <span>My Trips</span></a></li>
+                <li class="nav-item"><a href="itinerary-builder.html" class="nav-link"><i class="fas fa-route"></i> <span>Itinerary Builder</span></a></li>
+                <li class="nav-item"><a href="itinerary-view.html" class="nav-link"><i class="fas fa-binoculars"></i> <span>Itinerary View</span></a></li>
+                <li class="nav-item"><a href="city-search.html" class="nav-link"><i class="fas fa-city"></i> <span>City Search</span></a></li>
+                <li class="nav-item"><a href="activity-search.html" class="nav-link"><i class="fas fa-hiking"></i> <span>Activity Search</span></a></li>
+                <li class="nav-item"><a href="budget.html" class="nav-link"><i class="fas fa-chart-pie"></i> <span>Trip Budget</span></a></li>
+                <li class="nav-item"><a href="calendar.html" class="nav-link active"><i class="fas fa-calendar-alt"></i> <span>Calendar</span></a></li>
+                <li class="nav-item"><a href="public-itinerary.html" class="nav-link"><i class="fas fa-share-alt"></i> <span>Public Itinerary</span></a></li>
+                <li class="nav-item"><a href="profile.html" class="nav-link"><i class="fas fa-user-cog"></i> <span>Profile</span></a></li>
+                <li class="nav-item"><a href="admin.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> <span>Admin</span></a></li>
+            </ul>
+            
+            <div class="user-profile">
+                <div class="user-avatar">JS</div>
+                <div class="user-info">
+                    <h4>John Smith</h4>
+                    <p>Travel Enthusiast</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <div>
+                    <h1 class="page-title">Trip Calendar / Timeline</h1>
+                    <p class="page-subtitle">Italian Adventure • June 15-30, 2023</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="printCalendar()">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                </div>
+            </div>
+            
+            <div class="calendar-view-toggle">
+                <button class="view-btn active" onclick="showCalendarView()">Calendar View</button>
+                <button class="view-btn" onclick="showTimelineView()">Timeline View</button>
+                <button class="view-btn" onclick="showListView()">List View</button>
+            </div>
+            
+            <div class="calendar-container" id="calendarView">
+                <div class="calendar-header">
+                    <div class="calendar-nav">
+                        <button class="btn btn-secondary btn-sm" onclick="previousMonth()">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h2 class="calendar-title" id="calendarTitle">June 2023</h2>
+                        <button class="btn btn-secondary btn-sm" onclick="nextMonth()">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary" onclick="goToToday()">
+                        <i class="fas fa-calendar-day"></i> Today
+                    </button>
+                </div>
+                
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be generated here -->
+                </div>
+            </div>
+            
+            <div class="timeline-container" id="timelineView" style="display: none;">
+                <h3 class="section-title">Trip Timeline</h3>
+                <div class="timeline" id="timeline">
+                    <!-- Timeline will be generated here -->
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <h3 class="section-title">Selected Day Details</h3>
+                <div class="calendar-container" id="dayDetails">
+                    <!-- Day details will be shown here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Calendar data
+        const tripData = {
+            startDate: new Date(2023, 5, 15), // June 15, 2023
+            endDate: new Date(2023, 5, 30),   // June 30, 2023
+            locations: [
+                { city: 'Rome', startDay: 1, endDay: 3, color: '#4361ee' },
+                { city: 'Florence', startDay: 4, endDay: 6, color: '#7209b7' },
+                { city: 'Venice', startDay: 7, endDay: 9, color: '#f72585' },
+                { city: 'Milan', startDay: 10, endDay: 15, color: '#4cc9f0' }
+            ],
+            activities: {
+                1: [
+                    { time: '09:00', name: 'Colosseum Tour', type: 'activity' },
+                    { time: '13:00', name: 'Lunch at Trattoria', type: 'food' },
+                    { time: '15:00', name: 'Vatican City', type: 'activity' }
+                ],
+                2: [
+                    { time: '10:00', name: 'Piazza Navona', type: 'activity' },
+                    { time: '12:00', name: 'Pantheon Visit', type: 'activity' }
+                ],
+                3: [
+                    { time: '09:30', name: 'Trevi Fountain', type: 'activity' },
+                    { time: '11:00', name: 'Travel to Florence', type: 'travel' }
+                ],
+                4: [
+                    { time: '10:00', name: 'Duomo Cathedral', type: 'activity' },
+                    { time: '14:00', name: 'Uffizi Gallery', type: 'activity' }
+                ]
+            }
+        };
+        
+        let currentDate = new Date(2023, 5, 1); // June 1, 2023
+        let selectedDay = 15; // June 15, 2023
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCalendar();
+            renderTimeline();
+            showDayDetails(selectedDay);
+        });
+        
+        // Render calendar
+        function renderCalendar() {
+            const calendarGrid = document.getElementById('calendarGrid');
+            const calendarTitle = document.getElementById('calendarTitle');
+            
+            // Set calendar title
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+            calendarTitle.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+            
+            // Clear calendar
+            calendarGrid.innerHTML = '';
+            
+            // Add day headers
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day header';
+                dayElement.textContent = day;
+                calendarGrid.appendChild(dayElement);
+            });
+            
+            // Get first day of month and total days
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const totalDays = lastDay.getDate();
+            const startingDay = firstDay.getDay();
+            
+            // Add empty days for previous month
+            for (let i = 0; i < startingDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendarGrid.appendChild(emptyDay);
+            }
+            
+            // Add days of current month
+            const today = new Date();
+            const tripStart = tripData.startDate;
+            const tripEnd = tripData.endDate;
+            
+            for (let day = 1; day <= totalDays; day++) {
+                const currentDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.innerHTML = `<div class="day-number">${day}</div>`;
+                
+                // Check if today
+                if (currentDay.toDateString() === today.toDateString()) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Check if trip day
+                if (currentDay >= tripStart && currentDay <= tripEnd) {
+                    dayElement.classList.add('trip-day');
+                    
+                    // Calculate trip day number
+                    const tripDay = Math.floor((currentDay - tripStart) / (1000 * 60 * 60 * 24)) + 1;
+                    
+                    // Add location
+                    const location = tripData.locations.find(loc => 
+                        tripDay >= loc.startDay && tripDay <= loc.endDay
+                    );
+                    
+                    if (location) {
+                        dayElement.innerHTML += `<div class="day-location">${location.city}</div>`;
+                    }
+                    
+                    // Add event dots
+                    const activities = tripData.activities[tripDay];
+                    if (activities && activities.length > 0) {
+                        const activityTypes = [...new Set(activities.map(a => a.type))];
+                        activityTypes.forEach(type => {
+                            let dotClass = 'activity';
+                            if (type === 'travel') dotClass = 'travel';
+                            if (type === 'food') dotClass = 'food';
+                            
+                            dayElement.innerHTML += `<span class="event-dot ${dotClass}"></span>`;
+                        });
+                        dayElement.innerHTML += `<span class="event-label">${activities.length} activities</span>`;
+                    }
+                    
+                    // Add click event
+                    dayElement.style.cursor = 'pointer';
+                    dayElement.addEventListener('click', () => {
+                        selectedDay = tripDay;
+                        showDayDetails(tripDay);
+                        highlightSelectedDay();
+                    });
+                }
+                
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Add empty days for next month to complete grid
+            const totalCells = 42; // 6 rows * 7 days
+            const currentCells = startingDay + totalDays;
+            for (let i = currentCells; i < totalCells; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendarGrid.appendChild(emptyDay);
+            }
+            
+            highlightSelectedDay();
+        }
+        
+        // Highlight selected day
+        function highlightSelectedDay() {
+            document.querySelectorAll('.calendar-day').forEach(day => {
+                day.style.boxShadow = 'none';
+                day.style.borderWidth = '1px';
+            });
+            
+            // In a real app, we would find and highlight the selected day
+            // For simplicity, we'll just show a message
+        }
+        
+        // Show day details
+        function showDayDetails(dayNumber) {
+            const dayDetails = document.getElementById('dayDetails');
+            const location = tripData.locations.find(loc => 
+                dayNumber >= loc.startDay && dayNumber <= loc.endDay
+            );
+            
+            const activities = tripData.activities[dayNumber] || [];
+            const date = new Date(tripData.startDate);
+            date.setDate(date.getDate() + dayNumber - 1);
+            
+            const dateString = date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+            
+            dayDetails.innerHTML = `
+                <h3 class="section-title">Day ${dayNumber}: ${dateString}</h3>
+                <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: ${location?.color || '#4361ee'}; margin-right: 10px;"></div>
+                    <h4 style="font-size: 18px; color: var(--dark);">${location?.city || 'Travel Day'}</h4>
+                </div>
+                
+                ${activities.length > 0 ? `
+                    <div style="margin-top: 20px;">
+                        <h4 style="margin-bottom: 15px; color: var(--dark);">Activities for this day:</h4>
+                        ${activities.map(activity => `
+                            <div style="display: flex; align-items: center; padding: 12px; background-color: var(--light); border-radius: var(--border-radius); margin-bottom: 10px;">
+                                <div style="width: 40px; font-weight: 600; color: var(--primary);">${activity.time}</div>
+                                <div style="flex-grow: 1;">${activity.name}</div>
+                                <span style="padding: 4px 10px; background-color: ${getActivityColor(activity.type)}; color: white; border-radius: 12px; font-size: 12px;">
+                                    ${activity.type}
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : `
+                    <div class="no-events">
+                        <i class="fas fa-umbrella-beach"></i>
+                        <p>No activities scheduled for this day.</p>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="addActivityToDay(${dayNumber})">
+                            <i class="fas fa-plus"></i> Add Activities
+                        </button>
+                    </div>
+                `}
+                
+                <div style="display: flex; gap: 10px; margin-top: 25px;">
+                    <button class="btn btn-primary" onclick="editDay(${dayNumber})">
+                        <i class="fas fa-edit"></i> Edit Day
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewFullItinerary()">
+                        <i class="fas fa-binoculars"></i> View Full Itinerary
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Get activity color by type
+        function getActivityColor(type) {
+            switch(type) {
+                case 'activity': return '#4361ee';
+                case 'food': return '#f72585';
+                case 'travel': return '#4cc9f0';
+                default: return '#6c757d';
+            }
+        }
+        
+        // Render timeline
+        function renderTimeline() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            for (let day = 1; day <= 15; day++) {
+                const location = tripData.locations.find(loc => 
+                    day >= loc.startDay && day <= loc.endDay
+                );
+                
+                const activities = tripData.activities[day] || [];
+                const date = new Date(tripData.startDate);
+                date.setDate(date.getDate() + day - 1);
+                
+                const month = date.toLocaleDateString('en-US', { month: 'short' });
+                const dayNum = date.getDate();
+                
+                timeline.innerHTML += `
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-date">
+                            <div class="timeline-day">${dayNum}</div>
+                            <div class="timeline-month">${month}</div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-location">
+                                Day ${day}: ${location?.city || 'Travel Day'}
+                                ${activities.length > 0 ? `<span class="activity-count">${activities.length}</span>` : ''}
+                            </div>
+                            <div class="timeline-activities">
+                                ${activities.length > 0 ? 
+                                    activities.map(a => a.name).join(', ') : 
+                                    'Free day - explore at your own pace'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Navigation functions
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+        
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+        
+        function goToToday() {
+            currentDate = new Date();
+            renderCalendar();
+            selectedDay = 1;
+            showDayDetails(selectedDay);
+        }
+        
+        // View toggle functions
+        function showCalendarView() {
+            document.getElementById('calendarView').style.display = 'block';
+            document.getElementById('timelineView').style.display = 'none';
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        function showTimelineView() {
+            document.getElementById('calendarView').style.display = 'none';
+            document.getElementById('timelineView').style.display = 'block';
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        function showListView() {
+            alert('Switching to list view...');
+            // In a real app, this would switch to a list view
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        // Action functions
+        function printCalendar() {
+            alert('Opening print preview...');
+            // In a real app, this would open print dialog
+        }
+        
+        function addActivityToDay(dayNumber) {
+            alert(`Add activity to Day ${dayNumber}\n\nRedirecting to activity search...`);
+            window.location.href = 'activity-search.html';
+        }
+        
+        function editDay(dayNumber) {
+            alert(`Editing Day ${dayNumber}\n\nRedirecting to itinerary builder...`);
+            window.location.href = 'itinerary-builder.html';
+        }
+        
+        function viewFullItinerary() {
+            window.location.href = 'itinerary-view.html';
+        }
+    </script>
+</body>
+</html>

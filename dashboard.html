@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BON-VOYAGE | Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --shadow: 0 10px 20px rgba(0,0,0,0.08);
+            --shadow-light: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 25px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+        }
+        
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 26px;
+            margin-left: 12px;
+            letter-spacing: 1px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+        
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--accent);
+        }
+        
+        .nav-link i {
+            width: 24px;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        .user-profile {
+            padding: 20px 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+        
+        .user-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 20px;
+        }
+        
+        .stat-info h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .stat-info p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .recent-trips, .recommended-destinations {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .trips-grid, .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .trip-card, .destination-card {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease;
+        }
+        
+        .trip-card:hover, .destination-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .trip-header {
+            height: 120px;
+            background-color: var(--primary);
+            position: relative;
+            padding: 20px;
+            color: white;
+        }
+        
+        .trip-header h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .trip-date {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .trip-actions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .trip-actions button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .trip-actions button:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+        
+        .trip-body {
+            padding: 20px;
+            background-color: white;
+        }
+        
+        .trip-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .trip-detail {
+            text-align: center;
+        }
+        
+        .trip-detail .value {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--dark);
+        }
+        
+        .trip-detail .label {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        .destination-card {
+            background-color: white;
+        }
+        
+        .destination-image {
+            height: 150px;
+            background-color: #4361ee;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .destination-info {
+            padding: 20px;
+        }
+        
+        .destination-info h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .destination-info p {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .logo h1, .nav-link span, .user-info {
+                display: none;
+            }
+            
+            .logo {
+                justify-content: center;
+                padding: 0 0 30px;
+            }
+            
+            .nav-link {
+                justify-content: center;
+                padding: 15px 0;
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .user-profile {
+                justify-content: center;
+                padding: 20px 0;
+            }
+            
+            .user-avatar {
+                margin-right: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 70px;
+                flex-direction: row;
+                padding: 0;
+            }
+            
+            .logo {
+                padding: 0 20px;
+                border-bottom: none;
+                margin-bottom: 0;
+                border-right: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            .nav-menu {
+                display: flex;
+                flex-grow: 1;
+                justify-content: space-around;
+            }
+            
+            .nav-item {
+                margin-bottom: 0;
+            }
+            
+            .nav-link {
+                border-left: none;
+                border-bottom: 4px solid transparent;
+                padding: 0 15px;
+                height: 70px;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            .nav-link:hover, .nav-link.active {
+                border-left-color: transparent;
+                border-bottom-color: var(--accent);
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                margin-bottom: 5px;
+                font-size: 18px;
+            }
+            
+            .nav-link span {
+                display: block;
+                font-size: 12px;
+            }
+            
+            .user-profile {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-plane-departure"></i>
+                <h1>BON-VOYAGE</h1>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link active"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li class="nav-item"><a href="create-trip.html" class="nav-link"><i class="fas fa-plus-circle"></i> <span>Create Trip</span></a></li>
+                <li class="nav-item"><a href="my-trips.html" class="nav-link"><i class="fas fa-suitcase"></i> <span>My Trips</span></a></li>
+                <li class="nav-item"><a href="itinerary-builder.html" class="nav-link"><i class="fas fa-route"></i> <span>Itinerary Builder</span></a></li>
+                <li class="nav-item"><a href="itinerary-view.html" class="nav-link"><i class="fas fa-binoculars"></i> <span>Itinerary View</span></a></li>
+                <li class="nav-item"><a href="city-search.html" class="nav-link"><i class="fas fa-city"></i> <span>City Search</span></a></li>
+                <li class="nav-item"><a href="activity-search.html" class="nav-link"><i class="fas fa-hiking"></i> <span>Activity Search</span></a></li>
+                <li class="nav-item"><a href="budget.html" class="nav-link"><i class="fas fa-chart-pie"></i> <span>Trip Budget</span></a></li>
+                <li class="nav-item"><a href="calendar.html" class="nav-link"><i class="fas fa-calendar-alt"></i> <span>Calendar</span></a></li>
+                <li class="nav-item"><a href="public-itinerary.html" class="nav-link"><i class="fas fa-share-alt"></i> <span>Public Itinerary</span></a></li>
+                <li class="nav-item"><a href="profile.html" class="nav-link"><i class="fas fa-user-cog"></i> <span>Profile</span></a></li>
+                <li class="nav-item"><a href="admin.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> <span>Admin</span></a></li>
+            </ul>
+            
+            <div class="user-profile">
+                <div class="user-avatar">JS</div>
+                <div class="user-info">
+                    <h4>John Smith</h4>
+                    <p>Travel Enthusiast</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <div>
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Welcome back! Here's your travel overview.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="location.href='create-trip.html'"><i class="fas fa-plus"></i> New Trip</button>
+                    <button class="btn btn-secondary" id="notificationsBtn"><i class="fas fa-bell"></i></button>
+                </div>
+            </div>
+            
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-suitcase"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>5</h3>
+                        <p>Total Trips</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: rgba(114, 9, 183, 0.1); color: var(--secondary);">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>12</h3>
+                        <p>Cities Visited</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: rgba(247, 37, 133, 0.1); color: var(--accent);">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>42</h3>
+                        <p>Travel Days</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: rgba(76, 201, 240, 0.1); color: var(--success);">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>$3,240</h3>
+                        <p>Total Spent</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recent-trips">
+                <h3 class="section-title">Recent Trips <a href="my-trips.html" style="font-size: 14px; color: var(--primary); text-decoration: none;">View All</a></h3>
+                <div class="trips-grid">
+                    <div class="trip-card">
+                        <div class="trip-header" style="background: linear-gradient(135deg, #4361ee, #3a56d4);">
+                            <h4>Italian Adventure</h4>
+                            <p class="trip-date">June 15-30, 2023</p>
+                            <div class="trip-actions">
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                        <div class="trip-body">
+                            <div class="trip-details">
+                                <div class="trip-detail">
+                                    <div class="value">4</div>
+                                    <div class="label">Cities</div>
+                                </div>
+                                <div class="trip-detail">
+                                    <div class="value">15</div>
+                                    <div class="label">Days</div>
+                                </div>
+                                <div class="trip-detail">
+                                    <div class="value">$2,400</div>
+                                    <div class="label">Budget</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%;" onclick="location.href='itinerary-view.html'">View Itinerary</button>
+                        </div>
+                    </div>
+                    
+                    <div class="trip-card">
+                        <div class="trip-header" style="background: linear-gradient(135deg, #7209b7, #5a0891);">
+                            <h4>Japanese Discovery</h4>
+                            <p class="trip-date">Aug 10-25, 2023</p>
+                            <div class="trip-actions">
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                        <div class="trip-body">
+                            <div class="trip-details">
+                                <div class="trip-detail">
+                                    <div class="value">3</div>
+                                    <div class="label">Cities</div>
+                                </div>
+                                <div class="trip-detail">
+                                    <div class="value">15</div>
+                                    <div class="label">Days</div>
+                                </div>
+                                <div class="trip-detail">
+                                    <div class="value">$3,200</div>
+                                    <div class="label">Budget</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%;">View Itinerary</button>
+                        </div>
+                    </div>
+                    
+                    <div class="trip-card">
+                        <div class="trip-header" style="background: linear-gradient(135deg, #f72585, #e11576);">
+                            <h4>Bali Relaxation</h4>
+                            <p class="trip-date">Dec 5-15, 2023</p>
+                            <div class="trip-actions">
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                        <div class="trip-body">
+                            <div class="trip-details">
+                                <div class="trip-detail">
+                                    <div class="value">2</div>
+                                    <div class="label">Cities</div>
+                                </div>
+                                <div class="trip-detail">
+                                    <div class="value">10</div>
+                                    <div class="label">Days</div>
+                                </div>
+                                <div class="trip-detail">
+                                    <div class="value">$1,800</div>
+                                    <div class="label">Budget</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%;">View Itinerary</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommended-destinations">
+                <h3 class="section-title">Recommended Destinations</h3>
+                <div class="destinations-grid">
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: linear-gradient(135deg, #4361ee, #3a56d4);"></div>
+                        <div class="destination-info">
+                            <h4>Paris, France</h4>
+                            <p>City of Light with iconic landmarks and exquisite cuisine</p>
+                            <button class="btn btn-secondary" style="width: 100%;">Add to Trip</button>
+                        </div>
+                    </div>
+                    
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: linear-gradient(135deg, #7209b7, #5a0891);"></div>
+                        <div class="destination-info">
+                            <h4>Tokyo, Japan</h4>
+                            <p>Vibrant metropolis blending tradition with cutting-edge technology</p>
+                            <button class="btn btn-secondary" style="width: 100%;">Add to Trip</button>
+                        </div>
+                    </div>
+                    
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: linear-gradient(135deg, #f72585, #e11576);"></div>
+                        <div class="destination-info">
+                            <h4>Bali, Indonesia</h4>
+                            <p>Tropical paradise with lush landscapes and spiritual retreats</p>
+                            <button class="btn btn-secondary" style="width: 100%;">Add to Trip</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('notificationsBtn').addEventListener('click', function() {
+            alert('You have 3 new notifications:\n1. Italian Adventure starts in 5 days\n2. New activity recommendation for Tokyo\n3. Flight price alert for Paris');
+        });
+    </script>
+</body>
+</html>
